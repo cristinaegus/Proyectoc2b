@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/estilo.css" />
+</head>
+<body>
+    <h1>Formulario de Inscripción</h1>
+    <form action="" method="get">
+        <legend for="nombre">Nombre</legend>
+        <input
+          type="text"
+          name="nombre"
+          id="nombre"
+          placeholder="Introduce tu nombre"
+        />
+       
+  
+        <legend for="apellido">Apellido</legend>
+        <input
+          type="text"
+          name="apellido"
+          id="apellido"
+          placeholder="Introduce tu apellido"
+        />
+        <legend>Email</legend>
+        <input
+          type="email"
+          name="correo"
+          id=""
+          pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
+          required
+        />
+        
+        <br />
+      <legend>contraseña</legend>
+      <input type="password" name="contraseña" id="" />
+      <fieldset>
+        <legend>Idiomas que hablas</legend>
+        <fieldset>
+            <legend>Idiomas que hablas:</legend>
+            <label for="espanol">Español: </label>
+            <input type="checkbox" name="espanol" id="" />
+            <label for="ingles">Inglés: </label>
+            <input type="checkbox" name="ingles" id="" />
+            <label for="euskera">Euskera: </label>
+            <input type="checkbox" name="euskera" id="" />
+        
+          <legend for="tarifa">que tarifa deseas</legend>
+          <legend>Premium</legend>
+          <input type="checkbox" name="" id="">
+          <legend>Económica</legend>
+          <input type="checkbox" name="" id="">
+          <br />
+        <fieldset>
+            <input type="date" name="fecha" id="" />
+            <input type="time" name="hora" id="" />
+            <input type="datetime-local" name="fecha-hora" id="" />
+            <div>
+        </fieldset>
+        <input type="color" name="elige tu estado de ánimo" id="">Tu estado de animo hoy, elige un color
+        <br>
+
+        <legend>Danos tu opinión</legend>
+            <textarea
+            name="description"
+            id="description"
+            cols="30"
+            rows="10"
+            ></textarea>
+        </fieldset>
+     
+        <fieldset>
+            <legend>Provincia</legend>
+            <select name="provincia" id="">
+            <option value="">
+                <option value="Bizkaia">Bizkaia</option>
+                <option value="Gipuzkoa">Gipuzkoa</option>
+                <option value="Alava">Álava</option>
+            </option>
+            </select>
+
+            <div>
+                <button type="submit">Enviar</button>
+                <button type="reset">Borrar</button>
+            </div>
+            <fieldset>
+                <legend>Aqui tienes el tiempo para consultar </legend>
+            <iframe src="https://www.meteoblue.com/es/tiempo/mapas/widget/bilbao_espa%c3%b1a_3128026?windAnimation=1&gust=1&satellite=1&cloudsAndPrecipitation=1&temperature=1&sunshine=1&extremeForecastIndex=1&geoloc=fixed&tempunit=C&windunit=km%252Fh&lengthunit=metric&zoom=5&autowidth=auto"  frameborder="0" scrolling="NO" allowtransparency="true" sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox" style="width: 100%; height: 720px"></iframe><div><!-- DO NOT REMOVE THIS LINK --><a href="https://www.meteoblue.com/es/tiempo/mapas/bilbao_espa%c3%b1a_3128026?utm_source=map_widget&utm_medium=linkus&utm_content=map&utm_campaign=Weather%2BWidget" target="_blank" rel="noopener">meteoblue</a></div>
+            </fieldset>
+
+</body>
+</html>

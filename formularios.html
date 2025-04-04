@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="css/estilo.css" />
+    <script src="js/funciones.js"></script>
+  </head>
+  <body>
+    <h1>Formularios</h1>
+    <form action="" method="get">
+      <legend for="nombre">Nombre</legend>
+      <input
+        type="text"
+        name="nombre"
+        id="nombre"
+        placeholder="Introduce tu nombre"
+      />
+      <legend>Email</legend>
+      <input
+        type="email"
+        name="correo"
+        id=""
+        pattern="[^@\s]+@[^@\s]+\.[^@\s]+"
+        required
+      />
+
+      <legend for="apellido">Apellido</legend>
+      <input
+        type="text"
+        name="apellido"
+        id="apellido"
+        placeholder="Introduce tu apellido"
+      />
+      <br />
+
+      <legend for="edad" disable>Edad</legend>
+      <input
+        type="number"
+        name="edad"
+        min="0"
+        max="120"
+        placeholder="Introduce tu edad"
+      />
+      <br />
+      <textarea
+        name="description"
+        id="description"
+        cols="30"
+        rows="10"
+      ></textarea>
+      <br />
+      <legend>contraseña</legend>
+      <input type="password" name="contraseña" id="" />
+      <fieldset>
+        <legend>Idiomas que hablas</legend>
+        <br />
+        Idiomas que habla:
+        <legend for="espanol">espanol</legend>
+        <input type="checkbox" name="espanol" id="" />
+        <legend for="opciones"></legend>
+        <input type="checkbox" name="opcion1" id="" />
+        <input type="checkbox" name="opcion2" id="" />
+        <button type="submit">Enviar</button>
+        <fieldset>
+          <legend for="tarifa">que tarifa deseas</legend>
+          <legend>Premium</legend>
+          <br />
+          <input type="radio" name="tarifa" id="" value="premium" />
+          <input type="radio" name="tarifa" id="" value="economica" />
+          <legend>economica</legend>
+          <br />
+          <select name="provincia" id="">
+            Provincia
+          </select>
+          <option value="Bikaia">Bizkaia</option>
+          <option value="Bikaia">Alava</option>
+          <option value="Bikaia">Guipuzcoa</option>
+          <input type="radio" name="tarifa" id="" value="free" />
+        </fieldset>
+      </fieldset>
+      <input type="date" name="fecha" id="" />
+      <input type="time" name="hora" id="" />
+      <input type="datetime-local" name="fecha-hora" id="" />
+      <div>
+        <fieldset>
+          <legend>tiempo</legend>
+          <input type="date" name="fecha" id="" />
+          <input type="time" name="hora" id="" />
+          <input type="datetime-local" name="fecha-hora" id="" />
+        </fieldset>
+        <button type="reset">Borrar</button>
+        <input type="file" name="archivo" id="" accept=". pdf" multiple />
+      </div>
+    </form>
+  </body>
+</html>
