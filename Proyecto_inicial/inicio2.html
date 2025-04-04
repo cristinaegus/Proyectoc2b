@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/estilo.css" />
+    <script src="js/funciones.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Tablas</h1>
+
+    <ul id="indice">
+      <li><a href="inicio2.html#primeratabla">Tabla 1</a></li>
+      <li><a href="inicio2.html#segundatabla">Tabla 2</a></li>
+      <li><a href="inicio2.html#terceratabla">Tabla 3</a></li>
+    </ul>
+
+    <a href="inicio.html">Volver al inicio</a>
+
+    <!-- Incio de la tabla 1 -->
+    <table border="1" cellspacing="4" id="primeratabla">
+      <caption class="pie_de_tabla">
+        Tabla1: Tabla de usuarios
+      </caption>
+      <colgroup>
+        <col width="145" />
+        <col width="130" />
+        <col width="260" />
+        <col width="130" />
+        <col width="80" />
+      </colgroup>
+      <thead>
+        <tr>
+          <td>
+            <p>Fila encabezado</p>
+          </td>
+          <td>
+            <p>Nombre</p>
+          </td>
+          <td>
+            <p>Apellidos</p>
+          </td>
+          <td>
+            <p>DNI</p>
+          </td>
+          <td>
+            <p>Telefono</p>
+          </td>
+        </tr>
+      </thead>
+      <tr>
+        <td rowspan="5" style="text-align: left; padding-left: 10px">
+          <p>Lateral</p>
+        </td>
+        <td><p>Aitor</p></td>
+        <td><p>Donado</p></td>
+        <td><p>12345678L</p></td>
+        <td><p>666666666</p></td>
+      </tr>
+      <tr>
+        <td><p></p></td>
+        <td><p></p></td>
+        <td><p></p></td>
+        <td><p></p></td>
+      </tr>
+      <tr>
+        <td><p></p></td>
+        <td><p></p></td>
+        <td><p></p></td>
+        <td><p></p></td>
+      </tr>
+      <tr>
+        <td><p></p></td>
+        <td><p></p></td>
+        <td><p></p></td>
+        <td><p></p></td>
+      </tr>
+      <tr>
+        <td><p></p></td>
+        <td><p></p></td>
+        <td><p></p></td>
+        <td><p></p></td>
+      </tr>
+      <tfoot>
+        <tr>
+          <td style="text-align: left; padding-left: 10px">
+            <p>Total</p>
+          </td>
+          <td><p></p></td>
+          <td><p></p></td>
+          <td><p></p></td>
+          <td rowspan="2"><p></p></td>
+        </tr>
+        <tr>
+          <td colspan="4">
+            <p>Otro total</p>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+    <a href="inicio2.html#indice">Volver al índice</a>
+
+    <details>
+      <summary>Despliega esto</summary>
+      <!-- Incio de la tabla 2 -->
+      <table border="1" cellspacing="4" id="segundatabla">
+        <caption class="pie_de_tabla">
+          Tabla2: Tabla de usuarios
+        </caption>
+        <colgroup>
+          <col width="145" />
+          <col width="130" />
+          <col width="260" />
+          <col width="130" />
+          <col width="80" />
+        </colgroup>
+        <thead>
+          <tr>
+            <td>
+              <p>Fila encabezado</p>
+            </td>
+            <td>
+              <p>Nombre</p>
+            </td>
+            <td>
+              <p>Apellidos</p>
+            </td>
+            <td>
+              <p>DNI</p>
+            </td>
+            <td>
+              <p>Telefono</p>
+            </td>
+          </tr>
+        </thead>
+        <tr>
+          <td rowspan="5" style="text-align: left; padding-left: 10px">
+            <p>Lateral</p>
+          </td>
+          <td><p>Aitor</p></td>
+          <td><p>Donado</p></td>
+          <td><p>12345678L</p></td>
+          <td><p>666666666</p></td>
+        </tr>
+        <tr>
+          <td><p></p></td>
+          <td><p></p></td>
+          <td><p></p></td>
+          <td><p></p></td>
+        </tr>
+        <tr>
+          <td><p></p></td>
+          <td><p></p></td>
+          <td><p></p></td>
+          <td><p></p></td>
+        </tr>
+        <tr>
+          <td><p></p></td>
+          <td><p></p></td>
+          <td><p></p></td>
+          <td><p></p></td>
+        </tr>
+        <tr>
+          <td><p></p></td>
+          <td><p></p></td>
+          <td><p></p></td>
+          <td><p></p></td>
+        </tr>
+        <tfoot>
+          <tr>
+            <td style="text-align: left; padding-left: 10px">
+              <p>Total</p>
+            </td>
+            <td><p></p></td>
+            <td><p></p></td>
+            <td><p></p></td>
+            <td rowspan="2"><p></p></td>
+          </tr>
+          <tr>
+            <td colspan="4">
+              <p>Otro total</p>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+      <a href="inicio2.html#indice">Volver al índice</a>
+    </details>
+
+    <!-- Incio de la tabla 3 -->
+    <table border="1" cellspacing="4" id="terceratabla">
+      <caption>
+        Tabla2: Tabla de usuarios
+      </caption>
+      <colgroup>
+        <col width="145" />
+        <col width="130" />
+        <col width="260" />
+        <col width="130" />
+        <col width="80" />
+      </colgroup>
+      <thead>
+        <tr>
+          <td>
+            <p>Fila encabezado</p>
+          </td>
+          <td>
+            <p>Nombre</p>
+          </td>
+          <td>
+            <p>Apellidos</p>
+          </td>
+          <td>
+            <p>DNI</p>
+          </td>
+          <td>
+            <p>Telefono</p>
+          </td>
+        </tr>
+      </thead>
+      <tr>
+        <td rowspan="5" style="text-align: left; padding-left: 10px">
+          <p>Lateral</p>
+        </td>
+        <td><p>Aitor</p></td>
+        <td><p>Donado</p></td>
+        <td><p>12345678L</p></td>
+        <td><p>666666666</p></td>
+      </tr>
+      <tr>
+        <td><p></p></td>
+        <td><p></p></td>
+        <td><p></p></td>
+        <td><p></p></td>
+      </tr>
+      <tr>
+        <td><p></p></td>
+        <td><p></p></td>
+        <td><p></p></td>
+        <td><p></p></td>
+      </tr>
+      <tr>
+        <td><p></p></td>
+        <td><p></p></td>
+        <td><p></p></td>
+        <td><p></p></td>
+      </tr>
+      <tr>
+        <td><p></p></td>
+        <td><p></p></td>
+        <td><p></p></td>
+        <td><p></p></td>
+      </tr>
+      <tfoot>
+        <tr>
+          <td style="text-align: left; padding-left: 10px">
+            <p>Total</p>
+          </td>
+          <td><p></p></td>
+          <td><p></p></td>
+          <td><p></p></td>
+          <td rowspan="2"><p></p></td>
+        </tr>
+        <tr>
+          <td colspan="4">
+            <p>Otro total</p>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+    <a href="inicio2.html#indice">Volver al índice</a>
+
+    <button type="button" onclick="sacarAlerta('Has pulsado el botón')">
+      Pulsame
+    </button>
+    <button type="button" onclick="console.info('Has pulsado el botón')">
+      Hola en consola
+    </button>
+    <button type="button" onclick="console.warn('Has pulsado el botón')">
+      Aviso en consola
+    </button>
+    <button type="button" onclick="console.error('Has pulsado el botón')">
+      Error en consola
+    </button>
+  </body>
+</html>
