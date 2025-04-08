@@ -3,17 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>conversorAitor</title>
+    <title>Conversor Aitor</title>
   </head>
   <body>
-    <h2>ejercicio 2</h2>
+    <h2>Ejercicio 2</h2>
     <h2>Conversor de Temperatura</h2>
     <input type="text" id="numero" placeholder="Ingresa la temperatura" />
     <select name="" id="seleccion">
-      <option value="c a f">de C a F</option>
-      <option value="f a c">de F a C</option>
-      <option value="c a k">de C a K</option>
-      <option value="k a c">de K a C</option>
+      <option value="c a f">De C a F</option>
+      <option value="f a c">De F a C</option>
+      <option value="c a k">De C a K</option>
+      <option value="k a c">De K a C</option>
     </select>
 
     <button type="button" onclick="conversion()">Convertir</button>
@@ -21,6 +21,7 @@
     <div id="resultado">Resultado: <span id="resultadoValor">0.00</span></div>
   </body>
   <script>
+    // Funciones de conversión
     function c_a_f(temp) {
       return (temp * 9) / 5 + 32;
     }
@@ -33,20 +34,52 @@
     function k_a_c(temp) {
       return temp - 273.15;
     }
+
+    // Función principal de conversión
     const conversion = () => {
-      let temp = console.log(document.getElementById("numero").value);
-      let option = console.log(document.getElementById("seleccion").value);
-      console.log(c_a_f(temp));
-      document.getElementById("resultado").innerText = "Resultado: ";
-      let resultado = 0;
-      console.log(f_a_c(temp));
-      if (opcion == "c a f") {
-        resultado = c_a_f(temp);
-      } else if (opcion == "f a c") {
-        resultado = f_a_c(temp);
-      } else {
-        alert("Selecciona una opción válida");
+      // Obtener el valor ingresado y la opción seleccionada
+      let temp = parseFloat(document.getElementById("numero").value);
+      let opcion = document.getElementById("seleccion").value;
+      switch (opcion) {
+        case "c a f":
+          document.getElementById("resultado").innerText =
+            "Resultado: " + c_a_f(temp).toFixed(2) + " °F";
+          break;
+        case "f a c":
+          document.getElementById("resultado").innerText =
+            "Resultado: " + f_a_c(temp).toFixed(2) + " °C";
+          break;
+        case "c a k":
+          document.getElementById("resultado").innerText =
+            "Resultado: " + c_a_k(temp).toFixed(2) + " K";
+          break;
+        case "k a c":
+          document.getElementById("resultado").innerText =
+            "Resultado: " + k_a_c(temp).toFixed(2) + " °C";
+          break;
       }
+      // Validar que el valor ingresado sea un número
+      if (isNaN(temp)) {
+        alert("Por favor, ingresa un valor numérico válido.");
+        return;
+      }
+
+      let resultado = 0;
+
+      // Realizar la conversión según la opción seleccionada
+      if (opcion === "c a f") {
+        resultado = c_a_f(temp);
+      } else if (opcion === "f a c") {
+        resultado = f_a_c(temp);
+      } else if (opcion === "c a k") {
+        resultado = c_a_k(temp);
+      } else if (opcion === "k a c") {
+        resultado = k_a_c(temp);
+      } else {
+        alert("Selecciona una opción válida.");
+        return;
+      }
+
       // Mostrar el resultado con 2 decimales
       document.getElementById("resultadoValor").innerText =
         resultado.toFixed(2);
