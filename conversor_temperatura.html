@@ -21,6 +21,8 @@
     <select id="conversion">
       <option value="celsiusToFahrenheit">Celsius a Fahrenheit</option>
       <option value="fahrenheitToCelsius">Fahrenheit a Celsius</option>
+      <option value="celsiusToKelvin">Celsius a Kelvin</option>
+      <option value="kelvinToCelsius">Kelvin a Celsius</option>
     </select>
 
     <!-- Botón para realizar la conversión -->
@@ -45,6 +47,13 @@
           resultado = (temperatura * 9) / 5 + 32; // Celsius a Fahrenheit
         } else if (conversion === "fahrenheitToCelsius") {
           resultado = (temperatura - 32) * (5 / 9); // Fahrenheit a Celsius
+        } else if (conversion === "celsiusToKelvin") {
+          resultado = temperatura + 273.15; // Celsius a Kelvin
+        } else if (conversion === "kelvinToCelsius") {
+          resultado = temperatura - 273.15; // Kelvin a Celsius
+        } else {
+          alert("Selecciona una opción válida");
+          return;
         }
 
         // Mostrar el resultado con 2 decimales

@@ -12,6 +12,8 @@
     <select name="" id="seleccion">
       <option value="c a f">de C a F</option>
       <option value="f a c">de F a C</option>
+      <option value="c a k">de C a K</option>
+      <option value="k a c">de K a C</option>
     </select>
 
     <button type="button" onclick="conversion()">Convertir</button>
@@ -24,6 +26,12 @@
     }
     function f_a_c(temp) {
       return (temp - 32) * (5 / 9);
+    }
+    function c_a_k(temp) {
+      return temp + 273.15;
+    }
+    function k_a_c(temp) {
+      return temp - 273.15;
     }
     const conversion = () => {
       let temp = console.log(document.getElementById("numero").value);
