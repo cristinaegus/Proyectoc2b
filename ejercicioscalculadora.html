@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ejercicios Calculadora</title>
+  </head>
+  <body>
+    <h1>Calculadora Ejercicios</h1>
+
+    <div id="resultado">
+      Has hecho click <span id="resultado"></span>0 veces
+    </div>
+
+    <!-- Vincula las funciones a los botones -->
+    <button type="button" onclick="contarClicks()">Haz click aquí</button>
+    <button type="reset" onclick="reiniciarContador()">Reinicio</button>
+
+    <script>
+      // Variable para contar los clics
+      let contadorClicks = 0;
+
+      // Función que incrementa el contador y actualiza el texto
+      function contarClicks() {
+        contadorClicks++;
+        document.getElementById(
+          "resultado"
+        ).innerText = `Has hecho click ${contadorClicks} veces`;
+      }
+
+      // Función que reinicia el contador y actualiza el texto
+      function reiniciarContador() {
+        contadorClicks = 0;
+        document.getElementById(
+          "resultado"
+        ).innerText = `Has hecho click ${contadorClicks} veces`;
+      }
+    </script>
+  </body>
+</html>

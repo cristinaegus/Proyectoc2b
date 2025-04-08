@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <h1>Para ejecutar javascript</h1>
+    <div id="resultado"></div>
+    <button onclick="aniade_saludo()">Saludo</button>
+    <button onclick="muestra_resultado()">Resultado</button>
+  </body>
+
+  <script>
+    let frase = "JavaScript es divertido. Estoy aprendiendo JAVASCRIPT";
+    frase = frase
+      .replace("JavaScript", "Python")
+      .replace("JAVASCRIPT", "Python");
+
+    resultado = frase.toLowerCase().indexOf("javascript");
+
+    console.log(`${frase} incluye javascript en la posición ${resultado}`);
+    console.log(Boolean(0)); // false
+    console.log(Boolean("hola")); // true
+    console.log(Boolean([])); // true
+    console.log(Boolean(null)); // false
+    console.log("***************************");
+    /*
+    Crear un array que contenga nombres de ciudades.
+    Imprimir las ciudades que empiezan por B.
+    */
+
+    // Crear el array:
+    let ciudades = [
+      "Madrid",
+      "Barcelona",
+      "Vitoria",
+      "Bilbao",
+      "León",
+      "Burgos",
+    ];
+
+    console.log("Resultado de forEach");
+    ciudades.forEach((ciudad) => {
+      if (ciudad.startsWith("B")) {
+        console.log(ciudad);
+      }
+    });
+
+    console.log("Resultado de filter");
+    ciudadesConB = ciudades.filter((ciudad) => {
+      return ciudad.startsWith("B");
+    });
+    console.log(ciudadesConB);
+
+    /*Convertir todo el array en mayúsculas*/
+    const aMayus = function (cadena) {
+      return cadena.toUpperCase();
+    };
+
+    //ciudades = ciudades.map(aMayus);
+    ciudades = ciudades.map((ciudad) => ciudad.toUpperCase());
+    console.log(ciudades);
+
+    /*Crear un array con la longitud de los nombres de las ciudades*/
+
+    let longitudes = ciudades.map((ciudad) => ciudad.length);
+    console.log(longitudes);
+
+    /*Ordenar alfabéticamente las ciudades y crear un string 
+    con las iniciales de las ciudades*/
+    ciudades = ciudades.sort();
+    let iniciales = ciudades.map((ciudad) => ciudad.charAt(0));
+    console.log(iniciales.toString());
+
+    let iniciales_str = ciudades.reduce(function (concatenado, ciudad) {
+      return concatenado + ciudad.charAt(0);
+    }, "");
+    console.log(iniciales_str);
+
+    /*Añadir a ciudades los elemento de este array que no estén
+    ya en el array de ciudades*/
+    let ciudades_nuevas = [
+      "Toledo",
+      "Bilbao",
+      "Salamanca",
+      "Madrid",
+      "Valladolid",
+    ];
+
+    const enlistador = function (nuevo, listado) {
+      nuevo = nuevo.toUpperCase();
+      if (!listado.includes(nuevo)) {
+        listado.push(nuevo);
+      }
+    };
+
+    ciudades_nuevas.forEach(function (ciudad) {
+      enlistador(ciudad, ciudades);
+    });
+
+    console.log(ciudades);
+    ///////////////////////////////
+    function aniade_saludo() {
+      document.getElementById("resultado").textContent = "Hola";
+    }
+
+    function muestra_resultado() {
+      let iniciales_str = ciudades.reduce(function (concatenado, ciudad) {
+        return concatenado + ciudad.charAt(0);
+      }, "");
+      document.getElementById("resultado").textContent = iniciales_str;
+    }
+  </script>
+</html>
