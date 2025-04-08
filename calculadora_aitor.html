@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculadora</title>
+  </head>
+  <body>
+    <!-- Crear una calculadora con javascript en html con objetos y propiedades 
+    Craear una calculadora que devuelva el resultado de una operacion sobre dos numeros
+    dos inputs para escribir los numeros de entrada.
+    Un select para elegir la operacion a realizar (suma , resta, multiplicación, división y modulo)
+    Un boton para realizar el calculo. 
+    Las funciones de calculo deben ser metodos de un objeto calculadora.
+    De esa manera, seleccionar una operación será solo elegir un metodo, por ejemplo calculadora("sumar")
+    se debe comprobar las divisiones por cero.el resultado se agregara a un div-->
+
+    <h1>Calculadora</h1>
+    <form id="calculadoraForm">
+      <!-- Inputs para los números -->
+      <input type="text" id="num1" placeholder="Primer número" />
+      <input type="text" id="num2" placeholder="Segundo número" />
+      <br />
+      <!-- Select para elegir la operación -->
+      <select id="operacion">
+        <option value="sumar">Sumar</option>
+        <option value="restar">Restar</option>
+        <option value="multiplicar">Multiplicar</option>
+        <option value="dividir">Dividir</option>
+        <option value="modulo">Modulo</option>
+      </select>
+      <br />
+      <!-- Botón para calcular -->
+      <button type="button" onclick="calcular()">Calcular</button>
+    </form>
+    <!-- Div para mostrar el resultado -->
+    <div id="resultado">Resultado:</div>
+    <input
+      type="text"
+      id="resultadoValor"
+      title="Resultado de la operación"
+      placeholder="Resultado"
+      disabled
+    />
+    <script>
+      // Objeto calculadora con métodos para cada operación
+      const calculadora = {
+        sumar: function (num1, num2) {
+          return num1 + num2;
+        },
+        restar: function (num1, num2) {
+          return num1 - num2;
+        },
+        multiplicar: function (num1, num2) {
+          return num1 * num2;
+        },
+        dividir: function (num1, num2) {
+          if (num2 === 0) {
+            alert("No se puede dividir por cero.");
+            return null;
+          }
+          return num1 / num2;
+        },
+        modulo: function (num1, num2) {
+          return num1 % num2;
+        },
+      };
+
+      // Función para realizar el cálculo
+      function calcular() {
+        // Obtener los valores de los inputs y el select
+        const num1 = parseFloat(document.getElementById("num1").value);
+        const num2 = parseFloat(document.getElementById("num2").value);
+        const operacion = document.getElementById("operacion").value;
+
+        // Validar que los valores ingresados sean números
+        if (isNaN(num1) || isNaN(num2)) {
+          alert("Por favor, ingresa números válidos.");
+          return;
+        }
+
+        // Llamar al método correspondiente del objeto calculadora
+        const resultado = calculadora[operacion](num1, num2);
+
+        // Mostrar el resultado en el input de resultado
+        if (resultado !== null) {
+          document.getElementById("resultadoValor").value = resultado;
+        }
+      }
+    </script>
+  </body>
+</html>
