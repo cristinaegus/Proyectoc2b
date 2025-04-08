@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ejercicios</title>
+  </head>
+  <body>
+    <h1>Ejercicios</h1>
+    <div>Has hecho click <span id="resultado"></span> veces.</div>
+    <button id="clicador" type="button">Haz click aquí</button>
+    <button onclick="reiniciar()">Reinicio</button>
+  </body>
+  <script>
+    let contador = 0;
+    cambiaElemento("resultado");
+
+    function cambiaElemento(elemento) {
+      document.getElementById(elemento).innerText = contador;
+    }
+
+    const incrementa = function () {
+      document
+        .getElementById("clicador")
+        .addEventListener("click", function (e) {
+          contador++;
+          console.log(`Incremento ${contador}`);
+          cambiaElemento("resultado");
+        });
+    };
+    const reiniciar = function () {
+      contador = 0;
+      //console.log(`Reseteo ${contador}`);
+      cambiaElemento("resultado");
+    };
+    incrementa();
+  </script>
+</html>

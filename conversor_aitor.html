@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>conversorAitor</title>
+  </head>
+  <body>
+    <h2>ejercicio 2</h2>
+    <h2>Conversor de Temperatura</h2>
+    <input type="text" id="numero" placeholder="Ingresa la temperatura" />
+    <select name="" id="seleccion">
+      <option value="c a f">de C a F</option>
+      <option value="f a c">de F a C</option>
+    </select>
+
+    <button type="button" onclick="conversion()">Convertir</button>
+    <!-- Elemento para mostrar el resultado -->
+    <div id="resultado">Resultado: <span id="resultadoValor">0.00</span></div>
+  </body>
+  <script>
+    function c_a_f(temp) {
+      return (temp * 9) / 5 + 32;
+    }
+    function f_a_c(temp) {
+      return (temp - 32) * (5 / 9);
+    }
+    const conversion = () => {
+      let temp = console.log(document.getElementById("numero").value);
+      let option = console.log(document.getElementById("seleccion").value);
+      console.log(c_a_f(temp));
+      document.getElementById("resultado").innerText = "Resultado: ";
+      let resultado = 0;
+      console.log(f_a_c(temp));
+      if (opcion == "c a f") {
+        resultado = c_a_f(temp);
+      } else if (opcion == "f a c") {
+        resultado = f_a_c(temp);
+      } else {
+        alert("Selecciona una opción válida");
+      }
+      // Mostrar el resultado con 2 decimales
+      document.getElementById("resultadoValor").innerText =
+        resultado.toFixed(2);
+    };
+  </script>
+</html>

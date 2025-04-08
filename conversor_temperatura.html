@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Convertidor de Temperatura</title>
+  </head>
+  <body>
+    <h1>Convertidor de Temperatura</h1>
+
+    <!-- Input para ingresar el valor numérico -->
+    <label for="temperatura">Temperatura:</label>
+    <input
+      type="number"
+      id="temperatura"
+      placeholder="Ingresa la temperatura"
+    />
+
+    <!-- Select para elegir el tipo de conversión -->
+    <label for="conversion">Conversión:</label>
+    <select id="conversion">
+      <option value="celsiusToFahrenheit">Celsius a Fahrenheit</option>
+      <option value="fahrenheitToCelsius">Fahrenheit a Celsius</option>
+    </select>
+
+    <!-- Botón para realizar la conversión -->
+    <button type="button" onclick="convertirTemperatura()">Convertir</button>
+    <button type="reset" onclick="reiniciarCampos()">Reiniciar</button>
+
+    <!-- Elemento para mostrar el resultado -->
+    <div id="resultado">Resultado: <span id="resultadoValor">0.00</span></div>
+
+    <script>
+      function convertirTemperatura() {
+        // Obtener el valor ingresado y el tipo de conversión
+        const temperatura = parseFloat(
+          document.getElementById("temperatura").value
+        );
+        const conversion = document.getElementById("conversion").value;
+
+        let resultado;
+
+        // Realizar la conversión según la selección
+        if (conversion === "celsiusToFahrenheit") {
+          resultado = (temperatura * 9) / 5 + 32; // Celsius a Fahrenheit
+        } else if (conversion === "fahrenheitToCelsius") {
+          resultado = (temperatura - 32) * (5 / 9); // Fahrenheit a Celsius
+        }
+
+        // Mostrar el resultado con 2 decimales
+        document.getElementById("resultadoValor").innerText =
+          resultado.toFixed(2);
+      }
+
+      function reiniciarCampos() {
+        // Reiniciar los campos de entrada y el resultado
+        document.getElementById("temperatura").value = "";
+        document.getElementById("resultadoValor").innerText = "0.00";
+      }
+    </script>
+  </body>
+</html>
