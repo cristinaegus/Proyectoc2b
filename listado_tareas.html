@@ -13,6 +13,7 @@
       maxlength="40"
       placeholder="Introduce nueva tarea"
     />
+    <input type="datetime-local" id="fecha_tarea" />
     <button type="button" id="aniadir_tarea">Añadir</button>
     <h3>Tareas</h3>
     <ul id="listado"></ul>
@@ -35,7 +36,7 @@
         itemTarea = document.createElement("li");
         itemTarea.innerText = tarea + " ";
         itemBoton = document.createElement("button");
-        itemBoton.innerText = "Borrar";
+        itemBoton.innerText = tarea.texto + "" + tarea.fecha.formatted;
         itemBoton.addEventListener("click", () => borrarItem(indice));
         itemTarea.appendChild(itemBoton);
         console.log(itemTarea);
@@ -51,6 +52,7 @@
         alert("La tarea no puede estar vacía");
       } else {
         input_tarea.value = "";
+        input_momento.value = "";
         tareas.unshift(tareaNueva);
         console.log(tareas);
         renderizarListado();
