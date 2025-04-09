@@ -43,11 +43,13 @@ Validar que no se puedan agregar tareas vacías
 Cada elemento de la lista debe tener un boton para eliminarlo-->
   <script>
     let tareas = [];
-    const borrarItem = function () {
-      console.log("borrarItem");
+    const borrarItem = function (indice) {
+      console.log("borrarItem" + indice);
+      tareas.splice(indice, 1); // Eliminar la tarea del array
+      renderizarListado(); // Actualizar la lista en el navegador
     };
     const renderizarListado = function () {
-      tareas.forEach((tarea) => {
+      tareas.forEach((tarea, indice) => {
         const li = document.createElement("li");
         li.textContent = tarea + " ";
         const btnEliminar = document.createElement("button");
