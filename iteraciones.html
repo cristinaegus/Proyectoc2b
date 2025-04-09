@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Iteraciones</title>
+  </head>
+  <body>
+    <h1>Iteraciones</h1>
+  </body>
+  <script>
+    // Bucles While
+    console.log("Bucle con continue");
+    let contador = 0;
+    while (contador < 5) {
+      contador++;
+      if (contador == 3) {
+        continue;
+      }
+      console.log(`Iteración ${contador}`);
+    }
+    console.log("He terminado");
+    console.log("Bucle con break");
+    let contador2 = 0;
+    while (contador2 < 5) {
+      contador2++;
+      if (contador2 == 3) {
+        break;
+      }
+      console.log(`Iteración ${contador2}`);
+    }
+    console.log("He terminado");
+
+    console.log("Bucle do while");
+    let contador3 = -5;
+    do {
+      console.log(`Iteración ${contador3}`);
+      contador3--;
+    } while (contador3 > 0);
+
+    // Bucles for
+    console.log("Bucle for con continue");
+    for (let i = 0; i < 7; i++) {
+      if (i == 3) {
+        continue;
+      }
+      console.log(`Iteración ${i}`);
+    }
+    console.log("Bucles for con break");
+    for (let i = 0; i < 7; i++) {
+      if (i == 3) {
+        break;
+      }
+      console.log(`Iteración ${i}`);
+    }
+    let persona = {
+      nombre: "Ana",
+      edad: 25,
+      ciudad: "Madrid",
+      metodo: function () {
+        console.log("Hola");
+      },
+    };
+    console.log("for + in");
+    for (let clave in persona) {
+      console.log(`${clave}: ${persona[clave]}`);
+    }
+    let persona2 = {
+      nombre: "Juan",
+      edad: 35,
+      ciudad: "Bilbao",
+      metodo: function () {
+        console.log("Hola");
+      },
+    };
+
+    console.log("for + of");
+    const personas = [persona, persona2];
+
+    for (let valor of personas) {
+      console.log(valor);
+    }
+
+    console.log("for + of de string");
+
+    let mensaje = "for + of de string";
+
+    for (let letra of mensaje) {
+      if (letra == "+") {
+        continue;
+      }
+      if (letra == "t") {
+        break;
+      }
+      console.log(letra);
+    }
+  </script>
+</html>

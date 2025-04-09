@@ -4,6 +4,25 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Lista tareas Simple</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      ul {
+        list-style-type: none;
+        padding: 0;
+      }
+      li {
+        margin: 10px 0;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      button {
+        margin-left: 10px;
+      }
+    </style>
   </head>
   <body>
     <!-- Ejercicio 3: Lista de Tareas Simple
@@ -13,7 +32,49 @@ Un input para escribir la tarea
 Un botón para agregar la tarea a la lista
 Una lista desordenada (ul) donde aparecerán las tareas
 Cada elemento de la lista debe tener un botón para eliminarlo
-Validar que no se puedan agregar tareas vacías -->
-    <h1>Lita de Tareas</h1>
+Validar que no se puedan agregar tareas vacías 
+Cada elemento de la lista debe tener un boton para eliminarlo-->
+
+    <h1>Lista de Tareas</h1>
+    <!-- Input para escribir la tarea -->
+    <input type="text" id="tareaInput" placeholder="Escribe una tarea" />
+    <!-- Botón para agregar la tarea -->
+    <button onclick="agregarTarea()">Agregar Tarea</button>
+    <!-- Lista desordenada donde aparecerán las tareas -->
+    <ul id="listaTareas"></ul>
+
+    <script>
+      // Función para agregar una tarea
+      function agregarTarea() {
+        const tareaInput = document.getElementById("tareaInput");
+        const tareaTexto = tareaInput.value.trim();
+
+        // Validar que no se puedan agregar tareas vacías
+        if (tareaTexto === "") {
+          alert("Por favor, escribe una tarea antes de agregarla.");
+          return;
+        }
+        // Crear un nuevo elemento de lista (li)
+        const nuevaTarea = document.createElement("li");
+        nuevaTarea.textContent = tareaTexto;
+
+        // Crear un botón para eliminar la tarea
+        const botonEliminar = document.createElement("button");
+        botonEliminar.textContent = "Eliminar";
+        botonEliminar.onclick = function () {
+          nuevaTarea.remove();
+        };
+
+        // Agregar el botón al elemento de lista
+        nuevaTarea.appendChild(botonEliminar);
+
+        // Agregar la nueva tarea a la lista
+        const listaTareas = document.getElementById("listaTareas");
+        listaTareas.appendChild(nuevaTarea);
+
+        // Limpiar el input
+        tareaInput.value = "";
+      }
+    </script>
   </body>
 </html>

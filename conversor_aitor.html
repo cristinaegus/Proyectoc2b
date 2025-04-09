@@ -34,6 +34,11 @@
     function k_a_c(temp) {
       return temp - 273.15;
     }
+    function comprobar_num(num) {
+      if (isNaN(num) || !isFinite(num)) {
+        window.alert("Introduce correctamente el número");
+      }
+    }
 
     // Función principal de conversión
     const conversion = () => {

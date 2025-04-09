@@ -72,12 +72,13 @@
         const num1 = parseFloat(document.getElementById("num1").value);
         const num2 = parseFloat(document.getElementById("num2").value);
         const operacion = document.getElementById("operacion").value;
-
-        // Validar que los valores ingresados sean números
-        if (isNaN(num1) || isNaN(num2)) {
-          alert("Por favor, ingresa números válidos.");
-          return;
-        }
+        //comporbar si los valores de la funcion calcular son correctos
+        if (calcular)
+          if (isNaN(num1) || isNaN(num2)) {
+            // Validar que los valores ingresados sean números
+            alert("Por favor, ingresa números válidos.");
+            return;
+          }
 
         // Llamar al método correspondiente del objeto calculadora
         const resultado = calculadora[operacion](num1, num2);
@@ -85,6 +86,12 @@
         // Mostrar el resultado en el input de resultado
         if (resultado !== null) {
           document.getElementById("resultadoValor").value = resultado;
+          if (resultado === null) {
+            document.getElementById("resultado").innerText = "Resultado: Error";
+          } else {
+            document.getElementById("resultado").innerText =
+              "Resultado: " + resultado;
+          }
         }
       }
     </script>
