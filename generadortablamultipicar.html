@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador para tabla de multipicar </title>
+</head>
+<body>
+    <h1>Generador para tabla de multiplicar</h1>
+    <!-- Ejercicio 4: Generador de Tabla de Multiplicar
+Objetivo: Generar la tabla de multiplicar de un número dado.
+Requisitos:
+Un input para ingresar un número
+
+Ejercicios 1
+
+Un botón para generar la tabla
+Una tabla HTML (elemento table) que muestre la tabla de multiplicar del 1 al 10
+Cada fila debe mostrar: "X × Y = Z" (ej: "5 × 3 = 15")
+Validar que se ingrese un número válido -->
+<style>
+    table {
+        border-collapse: collapse;
+        width: 50%;
+        margin-top: 20px;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+    }
+    th {
+        background-color: #f4f4f4;
+    }
+</style>
+</head>
+<body>
+<h1>Generador de Tabla de Multiplicar</h1>
+<!-- Input para ingresar el número -->
+<input type="text" id="numeroInput" placeholder="Ingresa un número" />
+<!-- Botón para generar la tabla -->
+<button onclick="generarTabla()">Generar Tabla</button>
+<!-- Contenedor para la tabla -->
+<div id="tablaResultado"></div>
+
+<script>
+    function generarTabla() {
+        const numeroInput = document.getElementById("numeroInput").value.trim();
+        const tablaResultado = document.getElementById("tablaResultado");
+  // Validar que se ingrese un número válido
+  if (isNaN(numeroInput) || numeroInput === "") {
+                alert("Por favor, ingresa un número válido.");
+                return;
+            }
+
+            const numero = parseInt(numeroInput);
+
+            // Limpiar el contenido previo
+            tablaResultado.innerHTML = "";
+
+            // Crear la tabla
+            const tabla = document.createElement("table");
+            const encabezado = document.createElement("tr");
+            encabezado.innerHTML = "<th>X</th><th>Y</th><th>Resultado</th>";
+            tabla.appendChild(encabezado);
+
+            // Generar las filas de la tabla
+            for (let i = 1; i <= 10; i++) {
+                const fila = document.createElement("tr");
+                fila.innerHTML = `<td>${numero}</td><td>${i}</td><td>${numero * i}</td>`;
+                tabla.appendChild(fila);
+            }
+
+            // Agregar la tabla al contenedor
+            tablaResultado.appendChild(tabla);
+        }
+    </script>
+</body>
+</html>
