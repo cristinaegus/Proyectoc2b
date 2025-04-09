@@ -45,6 +45,7 @@ Cada elemento de la lista debe tener un boton para eliminarlo-->
 
     <script>
       // Función para agregar una tarea
+
       function agregarTarea() {
         const tareaInput = document.getElementById("tareaInput");
         const tareaTexto = tareaInput.value.trim();
@@ -54,9 +55,12 @@ Cada elemento de la lista debe tener un boton para eliminarlo-->
           alert("Por favor, escribe una tarea antes de agregarla.");
           return;
         }
+
         // Crear un nuevo elemento de lista (li)
         const nuevaTarea = document.createElement("li");
-        nuevaTarea.textContent = tareaTexto;
+
+        // Crear un nodo de texto para la tarea
+        const textoTarea = document.createTextNode(tareaTexto);
 
         // Crear un botón para eliminar la tarea
         const botonEliminar = document.createElement("button");
@@ -65,7 +69,8 @@ Cada elemento de la lista debe tener un boton para eliminarlo-->
           nuevaTarea.remove();
         };
 
-        // Agregar el botón al elemento de lista
+        // Agregar el texto y el botón al elemento de lista
+        nuevaTarea.appendChild(textoTarea);
         nuevaTarea.appendChild(botonEliminar);
 
         // Agregar la nueva tarea a la lista

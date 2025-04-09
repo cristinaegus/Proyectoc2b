@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lista de Tareas</title>
+    <style>
+      ul {
+        list-style-type: none;
+        padding: 0;
+      }
+      li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+      button {
+        margin-left: 10px; /* Espacio entre la tarea y el botón */
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Lista de Tareas</h1>
+    <input
+      type="text"
+      id="tarea_nueva"
+      maxlength="30"
+      placeholder="Escribe una tarea"
+    />
+    <h3>Tareas</h3>
+    <button id="agrearTarea">Agregar Tarea</button>
+    <ul></ul>
+  </body>
+  <!-- Ejercicio 3: Lista de Tareas Simple
+Objetivo: Crear una lista de tareas donde se puedan agregar y eliminar elementos.
+Requisitos:
+Un input para escribir la tarea
+Un botón para agregar la tarea a la lista
+Una lista desordenada (ul) donde aparecerán las tareas
+Cada elemento de la lista debe tener un botón para eliminarlo
+Validar que no se puedan agregar tareas vacías 
+Cada elemento de la lista debe tener un boton para eliminarlo-->
+  <script>
+    let tareas = [];
+    const borrarItem = function () {
+      console.log("borrarItem");
+    };
+    const renderizarListado = function () {
+      tareas.forEach((tarea) => {
+        const li = document.createElement("li");
+        li.textContent = tarea + " ";
+        const btnEliminar = document.createElement("button");
+        btnEliminar.textContent = "Eliminar";
+        btnEliminar.addEventListener("click", function () {
+          eliminarTarea(tarea);
+        });
+        li.appendChild(btnEliminar); // Agregar el botón al elemento de lista
+        ul.appendChild(li); // Agregar el elemento de lista a la lista desordenada
+      });
+      const ul = document.querySelector("ul");
+      document.getElementById("listado").appendChild;
+    };
+
+    // Función para agregar una tarea
+    const agregarTarea = function () {
+      const tareaNueva = document.getElementById("tarea_nueva").value.trim();
+
+      // Validar que no se puedan agregar tareas vacías
+      if (tareaNueva === "") {
+        alert("Por favor, escribe una tarea antes de agregarla.");
+        return;
+      }
+
+      tareas.unshift(tareaNueva); // Agregar la tarea al inicio del array
+      document.getElementById("tarea_nueva").value = ""; // Limpiar el input
+      mostrarTareas(); // Actualizar la lista en el navegador
+    };
+
+    // Función para eliminar una tarea
+    const eliminarTarea = function (tarea) {
+      tareas = tareas.filter((t) => t !== tarea); // Filtrar la tarea a eliminar
+      mostrarTareas(); // Actualizar la lista después de eliminar
+    };
+
+    // Función para mostrar las tareas en la lista
+    const mostrarTareas = function () {
+      const ul = document.querySelector("ul");
+      ul.innerHTML = ""; // Limpiar la lista antes de mostrar las tareas
+      tareas.forEach((tarea) => {
+        const li = document.createElement("li");
+        li.textContent = tarea;
+
+        // Crear el botón "Eliminar"
+        const btnEliminar = document.createElement("button");
+        btnEliminar.textContent = "Eliminar";
+        btnEliminar.addEventListener("click", function () {
+          eliminarTarea(tarea);
+        });
+
+        li.appendChild(btnEliminar); // Agregar el botón al elemento de lista
+        ul.appendChild(li); // Agregar el elemento de lista a la lista desordenada
+      });
+    };
+
+    // Agregar el evento al botón "Agregar Tarea"
+    document
+      .getElementById("agrearTarea")
+      .addEventListener("click", agregarTarea);
+  </script>
+</html>
