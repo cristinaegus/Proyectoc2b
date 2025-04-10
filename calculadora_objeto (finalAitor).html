@@ -22,11 +22,9 @@
   <script>
     let calculadora = {
       sumar: function (a, b) {
-        if (this.comprobar_num(a) && this.comprobar_num(b)) {
-          return a + b;
-        } else {
-          return false;
-        }
+        this.comprobar_num(a);
+        this.comprobar_num(b);
+        return a + b;
       },
       restar(a, b) {
         if (this.comprobar_num(a) && this.comprobar_num(b)) {
@@ -57,8 +55,9 @@
         }
       },
       comprobar_num(num) {
-        if (isNaN(num) || !isFinite(num)) {
-          window.alert("Introduce correctamente el número");
+        if (typeof num !== "number" || isNaN(num)) {
+          throw new Error("El valor no es un número válido");
+          //window.alert("Introduce correctamente el número");
           return false;
         } else {
           return true;
@@ -78,6 +77,12 @@
       let num1 = parseFloat(document.getElementById("num1").value);
       let num2 = parseFloat(document.getElementById("num2").value);
       let opcion = document.getElementById("operacion").value;
+      try {
+        solucion = calculadora[opcion](num1, num2);
+      } catch (error) {
+        window.alert(error.message);
+        aniadir_resultado(`${error.message}`);
+      }
       solucion = calculadora[opcion](num1, num2);
       if (!isFinite(solucion)) {
         window.alert("El denominador no puede ser 0");

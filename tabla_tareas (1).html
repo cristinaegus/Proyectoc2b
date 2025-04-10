@@ -29,6 +29,16 @@
   </body>
   <script>
     let tareas = [];
+    class Tarea {
+      constructor(fecha, texto) {
+        console.log(fecha.valueOf());
+        if (!fecha.valueOf()) {
+          fecha = new Date();
+        }
+        this.fecha = fecha;
+        this.texto = texto;
+      }
+    }
 
     const borrarItem = function (indice) {
       console.log("borro" + indice);
@@ -47,15 +57,23 @@
       tablaTareas.innerHTML = "";
       tareas.forEach((tarea, indice) => {
         let filaTarea = document.createElement("tr");
+
+        // Creación del botón
         let itemBoton = document.createElement("button");
         itemBoton.innerText = "Borrar";
         itemBoton.addEventListener("click", () => borrarItem(indice));
+
+        // Relleno la fila
         filaTarea.innerHTML = `<th scope="row">${tarea.fecha.toLocaleString()}</th>
           <td>${tarea.texto}</td>
           <td class="boton_borrar"></td>`;
+
+        // Añado el botón a su casilla
         let casillaBoton = filaTarea.getElementsByClassName("boton_borrar")[0];
         casillaBoton.appendChild(itemBoton);
         console.log(filaTarea);
+
+        // Meter la fila en la tabla
         tablaTareas.appendChild(filaTarea);
       });
     };
@@ -63,9 +81,11 @@
     const aniadirTarea = function () {
       let input_tarea = document.getElementById("tarea_nueva");
       let input_momento = document.getElementById("momento");
-      let tareaNueva = {};
-      tareaNueva.texto = input_tarea.value;
-      tareaNueva.fecha = new Date(input_momento.value);
+      //let tareaNueva = {};
+      //tareaNueva.texto = input_tarea.value;
+      //tareaNueva.fecha = new Date(input_momento.value);
+      tareaNueva = new Tarea(new Date(input_momento.value), input_tarea.value);
+
       console.log(tareaNueva);
       if (tareaNueva.texto === "") {
         alert("La tarea no puede estar vacía");
