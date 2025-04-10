@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adivinanza Numeros</title>
+</head>
+<body>
+    <!-- Ejercicio 5: Adivinanza de Números
+    Objetivo: Crear un juego de adivinanza de números.
+    Ejercicio 5: Adivinanza de Números
+Objetivo: Juego donde el usuario debe adivinar un número aleatorio.
+Requisitos:
+Generar un número aleatorio entre 1 y 100 al cargar la página
+Un input para que el usuario ingrese su intento
+Un botón para comprobar el intento
+Mensajes que indiquen si el número es mayor o menor
+Mostrar el número de intentos realizados
+Mensaje de felicitaciones cuando adivine
+Botón para reiniciar el juego con un nuevo número aleatorioXX -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        input[type="number"] {
+            padding: 10px;
+            width: 200px;
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        #message {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+    </style>
+   <h1>Adivinanza de Números</h1> 
+   <input type="number" id="userGuess" placeholder="Ingresa tu intento" />
+   <button id="checkButton">Comprobar</button>
+   <button id="restartButton" style="display: none;">Reiniciar</button>
+   <div id="message"></div>
+   <div id="attempts"></div>
+   <script>
+       let randomNumber;
+       let attempts = 0;
+
+       function startGame() {
+           randomNumber = Math.floor(Math.random() * 100) + 1;
+           attempts = 0;
+           document.getElementById("userGuess").value = "";
+           document.getElementById("message").textContent = "";
+           document.getElementById("attempts").textContent = "";
+           document.getElementById("restartButton").style.display = "none";
+           document.getElementById("checkButton").style.display = "block";
+       }
+
+       function checkGuess() {
+           const userGuess = parseInt(document.getElementById("userGuess").value);
+           attempts++;
+           document.getElementById("attempts").textContent = "Intentos: " + attempts;
+
+           if (userGuess === randomNumber) {
+               document.getElementById("message").textContent = "¡Felicidades! Adivinaste el número.";
+               document.getElementById("restartButton").style.display = "block";
+               document.getElementById("checkButton").style.display = "none";
+           } else if (userGuess < randomNumber) {
+               document.getElementById("message").textContent = "El número es mayor.";
+           } else {
+               document.getElementById("message").textContent = "El número es menor.";
+           }
+       }
+
+       document.getElementById("checkButton").addEventListener("click", checkGuess);
+       document.getElementById("restartButton").addEventListener("click", startGame);
+
+       window.onload = startGame;
+   </script>
+</body>
+</html>

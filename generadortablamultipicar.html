@@ -45,6 +45,20 @@ Validar que se ingrese un número válido -->
 <div id="tablaResultado"></div>
 
 <script>
+    let numero =parceInt(document.getElementById("numeroInput").value.trim());
+    for (let i = 1; i <= 10; i++) {
+        const resultado = numero * i;
+        console.log(`${numero} x ${i} = ${resultado}`);
+    }
+    document.getElementById("numeroInput").addEventListener("input", function() {
+        const numero = parseInt(this.value.trim());
+        if (!isNaN(numero)) {
+            for (let i = 1; i <= 10; i++) {
+                const resultado = numero * i;
+                console.log(`${numero} x ${i} = ${resultado}`);
+            }
+        }
+    });
     function generarTabla() {
         const numeroInput = document.getElementById("numeroInput").value.trim();
         const tablaResultado = document.getElementById("tablaResultado");
