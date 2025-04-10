@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Juego de números</title>
+  </head>
+  <body>
+    <h1>Juego de adivinanzas</h1>
+    <label for="numero">Introduce el número: </label>
+    <input type="number" name="numero" id="numero" />
+    <button type="button" id="prediccion">Adivinar</button>
+    <button type="button" id="reinicio">Reiniciar</button>
+    <div id="exceso"></div>
+    <div id="defecto"></div>
+    <div id="intentos"></div>
+  </body>
+  <script>
+    function getRandomInt(min, max) {
+      const minCeiled = Math.ceil(min);
+      const maxFloored = Math.floor(max);
+      return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled); // The maximum is exclusive and the minimum is inclusive
+    }
+
+    let numeroMisterioso = getRandomInt(0, 101);
+    console.log(numeroMisterioso);
+    let intentos = 0;
+
+    const predecir = function () {
+      let numero = parseInt(document.getElementById("numero").value);
+      numero = numero % 100;
+      intentos++;
+      document.getElementById(
+        "intentos"
+      ).innerText = `Llevas ${intentos} intento${intentos > 1 ? "s" : ""}`;
+      if (numero < numeroMisterioso) {
+        console.log("mayor");
+        document.getElementById(
+          "defecto"
+        ).innerText = `El número es mayor que ${numero}`;
+      } else if (numero > numeroMisterioso) {
+        console.log("menor");
+        document.getElementById(
+          "exceso"
+        ).innerText = `El número es menor que ${numero}`;
+      } else {
+        console.log("Acertaste");
+        window.alert("Acertaste");
+      }
+    };
+    const reiniciar = function () {
+      numeroMisterioso = getRandomInt(0, 101);
+      console.log(numeroMisterioso);
+      document.getElementById("intentos").innerText = "";
+      document.getElementById("exceso").innerText = "";
+      document.getElementById("defecto").innerText = "";
+      document.getElementById("numero").value = "";
+    };
+    document.getElementById("reinicio").addEventListener("click", reiniciar);
+    document.getElementById("prediccion").addEventListener("click", predecir);
+  </script>
+</html>
