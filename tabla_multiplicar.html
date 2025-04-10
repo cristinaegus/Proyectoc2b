@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tabla de multiplicar</title>
+  </head>
+  <body>
+    <h1>Tabla de multiplicar</h1>
+    <label for="numero">Introduzca un número: </label>
+    <input type="number" name="numero" id="numero" />
+    <button id="ejecutar">Crear la tabla</button>
+    <div id="para_tabla"></div>
+  </body>
+  <script>
+    const crear_encabezado = function () {
+      let tabla = `<table><thead><th scope="col">Iterador</th><th scope="col">Numero</th><th scope="col">Resultado</th></thead>
+        <tbody id="cuerpo_tabla"></tbody>
+        </table>`;
+      let contenedor_tabla = document.getElementById("para_tabla");
+      contenedor_tabla.innerHTML = tabla;
+    };
+
+    const crear_tabla = function () {
+      let numero = parseInt(document.getElementById("numero").value);
+      numero = numero % 10;
+      crear_encabezado();
+      let cuerpoTabla = document.getElementById("cuerpo_tabla");
+
+      for (let i = 0; i <= 10; i++) {
+        let fila = document.createElement("tr");
+        console.log([i, numero, i * numero]);
+        let contenido = `<td>${i}</td><td>${numero}</td><td>${i * numero}</td>`;
+        fila.innerHTML = contenido;
+        cuerpoTabla.appendChild(fila);
+      }
+    };
+    document.getElementById("ejecutar").addEventListener("click", crear_tabla);
+  </script>
+</html>

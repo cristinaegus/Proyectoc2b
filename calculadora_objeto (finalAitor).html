@@ -19,12 +19,55 @@
     <button type="button" onclick="ejecutar()">Ejecutar</button>
     <div id="resultado"></div>
   </body>
-  <script type="module">
-    import { calculadora } from "./js/dispositivos.js";
+  <script>
+    let calculadora = {
+      sumar: function (a, b) {
+        this.comprobar_num(a);
+        this.comprobar_num(b);
+        return a + b;
+      },
+      restar(a, b) {
+        if (this.comprobar_num(a) && this.comprobar_num(b)) {
+          return a - b;
+        } else {
+          return false;
+        }
+      },
+      multiplicar: function (a, b) {
+        if (this.comprobar_num(a) && this.comprobar_num(b)) {
+          return a * b;
+        } else {
+          return false;
+        }
+      },
+      dividir(a, b) {
+        if (this.comprobar_num(a) && this.comprobar_num(b)) {
+          return a / b;
+        } else {
+          return false;
+        }
+      },
+      modulo(a, b) {
+        if (this.comprobar_num(a) && this.comprobar_num(b)) {
+          return a % b;
+        } else {
+          return false;
+        }
+      },
+      comprobar_num(num) {
+        if (typeof num !== "number" || isNaN(num)) {
+          throw new Error("El valor no es un número válido");
+          //window.alert("Introduce correctamente el número");
+          return false;
+        } else {
+          return true;
+        }
+      },
+    };
 
     const aniadir_resultado = function (mensaje) {
-      const div_resultados = document.getElementById("resultado");
-      const nuevo_div = document.createElement("div");
+      div_resultados = document.getElementById("resultado");
+      nuevo_div = document.createElement("div");
       nuevo_div.textContent = mensaje;
       console.log(nuevo_div);
       div_resultados.appendChild(nuevo_div);
@@ -34,7 +77,13 @@
       let num1 = parseFloat(document.getElementById("num1").value);
       let num2 = parseFloat(document.getElementById("num2").value);
       let opcion = document.getElementById("operacion").value;
-      let solucion = calculadora[opcion](num1, num2);
+      try {
+        solucion = calculadora[opcion](num1, num2);
+      } catch (error) {
+        window.alert(error.message);
+        aniadir_resultado(`${error.message}`);
+      }
+      solucion = calculadora[opcion](num1, num2);
       if (!isFinite(solucion)) {
         window.alert("El denominador no puede ser 0");
         aniadir_resultado("El denominador no puede ser 0");
@@ -44,8 +93,6 @@
         aniadir_resultado(
           `Resultado de ${opcion} ${num1} y  ${num2} es ${solucion}`
         );
-      } else {
-        aniadir_resultado("Introduce correctamente los números");
       }
     };
   </script>

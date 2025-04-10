@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Juego</title>
+  </head>
+  <!-- Ejercicio 5: Adivinanza de Números
+    Objetivo: Crear un juego de adivinanza de números.
+    Ejercicio 5: Adivinanza de Números
+Objetivo: Juego donde el usuario debe adivinar un número aleatorio.
+Requisitos:
+Generar un número aleatorio entre 1 y 100 al cargar la página
+Un input para que el usuario ingrese su intento
+Un botón para comprobar el intento
+Mensajes que indiquen si el número es mayor o menor
+Mostrar el número de intentos realizados
+Mensaje de felicitaciones cuando adivine
+Botón para reiniciar el juego con un nuevo número aleatorioXX -->
+  <body>
+    <h1>Juego adivinanza</h1>
+    <input type="number" name="numero" id="numero" />
+    <button type="button" id="prediccion">Adivinar</button>
+    <button type="button" id="reiniciar">Reiniciar</button>
+    <div id="exceso"></div>
+    <div id="defecto"></div>
+    <div id="intentos"></div>
+  </body>
+  <script>
+    //Generar un número aleatorio entre 1 y 100 al cargar la página
+    let numeroMisterioso = 0 - 101;
+    let intentos = 0;
+    function generarNumeroAleatorio() {
+      numeroMisterioso = Math.floor(Math.random() * 100) + 1;
+    }
+    generarNumeroAleatorio();
+    //Un input para que el usuario ingrese su intento
+
+    const prediccion = document.getElementById("prediccion");
+    let numero = parceInt.getElementById;
+    numero = numero % 100;
+    intentos = intentos + 1;
+
+    const botonReiniciar = document.getElementById("reiniciar");
+    botonReiniciar.addEventListener("click", function () {
+      location.reload();
+    });
+    //Un botón para comprobar el intento
+    botonAdivinar.addEventListener("click", function () {
+      if (numeroMisterioso < numero) {
+        document.getElementById("exceso").innerHTML = "El número es menor";
+      } else if (numeroMisterioso > numero) {
+        document.getElementById("defecto").innerHTML = "El número es mayor";
+      } else {
+        document.getElementById("intentos").innerHTML =
+          "Felicitaciones, adivinaste el número en " + intentos + " intentos";
+      }
+    });
+    const inputNumero = document.getElementById("numero");
+  </script>
+</html>

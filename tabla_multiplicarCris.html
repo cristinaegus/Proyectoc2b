@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tabla de Multiplicar</title>
+    <style>
+      table {
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: center;
+      }
+    </style>
+    <!-- Ejercicio 4: Generador de Tabla de Multiplicar
+Objetivo: Generar la tabla de multiplicar de un número dado.
+Requisitos:
+Un input para ingresar un número
+
+Ejercicios 1
+
+Un botón para generar la tabla
+Una tabla HTML (elemento table) que muestre la tabla de multiplicar del 1 al 10
+Cada fila debe mostrar: "X × Y = Z" (ej: "5 × 3 = 15")
+Validar que se ingrese un número válido -->
+  </head>
+  <body>
+    <h1>Tabla de Multiplicar</h1>
+    <label for="numero">Introduzca número</label>
+    <input type="number" id="numero" />
+    <button id="ejecutar">Crear tabla</button>
+    <div id="tablaResultado"></div>
+
+    <script>
+      const crearTabla = function () {
+        const numeroInput = document.getElementById("numero").value.trim();
+        const tablaResultado = document.getElementById("tablaResultado");
+
+        // Validar que se ingrese un número válido
+        if (isNaN(numeroInput) || numeroInput === "") {
+          alert("Por favor, ingresa un número válido.");
+          return;
+        }
+
+        const numero = parseInt(numeroInput);
+
+        // Limpiar tablas previas
+        tablaResultado.innerHTML = "";
+
+        // Crear la tabla
+        const tablaMultiplicar = document.createElement("table");
+        for (let i = 1; i <= 10; i++) {
+          const fila = document.createElement("tr");
+          const celda1 = document.createElement("td");
+          const celda2 = document.createElement("td");
+          const celda3 = document.createElement("td");
+
+          celda1.innerText = `${numero} x ${i}`;
+          celda2.innerText = "=";
+          celda3.innerText = numero * i;
+
+          fila.appendChild(celda1);
+          fila.appendChild(celda2);
+          fila.appendChild(celda3);
+          tablaMultiplicar.appendChild(fila);
+        }
+
+        // Agregar la tabla al contenedor
+        tablaResultado.appendChild(tablaMultiplicar);
+      };
+
+      // Asignar el evento click al botón
+      document.getElementById("ejecutar").addEventListener("click", crearTabla);
+    </script>
+  </body>
+</html>
