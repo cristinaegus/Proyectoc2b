@@ -19,9 +19,9 @@
     <table>
       <thead>
         <tr>
-          <th scope="col">Tarea</th>
           <th scope="col">Fecha</th>
-          <th scope="col">Hora</th>
+          <th scope="col">Tarea</th>
+          <th scope="col">Borrar</th>
         </tr>
       </thead>
       <tbody id="tabla_tareas"></tbody>
@@ -37,6 +37,19 @@
         }
         this.fecha = fecha;
         this.texto = texto;
+      }
+
+      creaFila(indice) {
+        let filaTarea = document.createElement("tr");
+        filaTarea.innerHTML = `<th scope="row">${this.fecha.toLocaleString()}</th>
+          <td>${this.texto}</td>
+          <td class="boton_borrar"></td>`;
+        let itemBoton = document.createElement("button");
+        itemBoton.innerText = "Borrar";
+        itemBoton.addEventListener("click", () => borrarItem(indice));
+        let casillaBoton = filaTarea.getElementsByClassName("boton_borrar")[0];
+        casillaBoton.appendChild(itemBoton);
+        return filaTarea;
       }
     }
 
@@ -56,21 +69,17 @@
       let tablaTareas = document.getElementById("tabla_tareas");
       tablaTareas.innerHTML = "";
       tareas.forEach((tarea, indice) => {
-        let filaTarea = document.createElement("tr");
-
         // Creación del botón
         let itemBoton = document.createElement("button");
         itemBoton.innerText = "Borrar";
         itemBoton.addEventListener("click", () => borrarItem(indice));
 
         // Relleno la fila
-        filaTarea.innerHTML = `<th scope="row">${tarea.fecha.toLocaleString()}</th>
-          <td>${tarea.texto}</td>
-          <td class="boton_borrar"></td>`;
+        let filaTarea = tarea.creaFila(indice);
 
         // Añado el botón a su casilla
-        let casillaBoton = filaTarea.getElementsByClassName("boton_borrar")[0];
-        casillaBoton.appendChild(itemBoton);
+        //let casillaBoton = filaTarea.getElementsByClassName("boton_borrar")[0];
+        //casillaBoton.appendChild(itemBoton);
         console.log(filaTarea);
 
         // Meter la fila en la tabla
