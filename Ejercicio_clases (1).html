@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ejercicio de clases</title>
+  </head>
+  <body>
+    <h1>Ejercicio de clases</h1>
+    <label for="titulo">Título</label>
+    <input
+      type="text"
+      name="titulo"
+      id="titulo"
+      placeholder="Introduzca el título"
+      maxlength="100"
+    />
+
+    <label for="director">Director</label>
+    <input
+      type="text"
+      name="director"
+      id="director"
+      placeholder="Introduzca el director"
+      maxlength="50"
+    />
+
+    <label for="anio">Año</label>
+    <input
+      type="text"
+      name="anio"
+      id="anio"
+      placeholder="Introduzca el año"
+      maxlength="4"
+    />
+
+    <label for="actores">Actores</label>
+    <input
+      type="text"
+      name="actores"
+      id="actores"
+      placeholder="Introduzca los actores"
+      maxlength="100"
+    />
+
+    <!-- Selector para el país -->
+    <label for="pais">Seleccione uno o más países:</label>
+    <select name="pais" id="pais" multiple>
+      <option value="" disabled>Seleccione países</option>
+    </select>
+
+    <!-- Selector para el género -->
+    <label for="genero">Seleccione uno o más géneros:</label>
+    <select name="genero" id="genero" multiple>
+      <option value="" disabled>Seleccione géneros</option>
+    </select>
+
+    <label for="calificacion">Seleccione la calificación:</label>
+    <select name="calificacion" id="calificacion">
+      <option value="" disabled>Seleccione una calificación</option>
+    </select>
+
+    <button type="button" id="aniadir">Añadir Película</button>
+  </body>
+  <script type="module">
+    import { Pelicula } from "./js/pelicula.js";
+
+    // Definir los valores aceptables con selectores
+    const paises = Pelicula.getPaises();
+    const generos = Pelicula.getGeneros();
+    const calificaciones = Array.from({ length: 10 }, (_, i) => i + 1); // [1, 2, ..., 10]
+
+    const poblarSelector = function (identificador, opciones) {
+      let selector = document.getElementById(identificador);
+      opciones.forEach((opcion) => {
+        let opcionElem = document.createElement("option");
+        opcionElem.setAttribute("value", opcion);
+        opcionElem.textContent = opcion;
+        selector.appendChild(opcionElem);
+      });
+    };
+
+    // Poblar los selectores con los valores aceptables
+    poblarSelector("pais", paises);
+    poblarSelector("genero", generos);
+    poblarSelector("calificacion", calificaciones);
+
+    const obtenerSeleccionados = (selector) => {
+      const selectElement = document.getElementById(selector);
+      return Array.from(selectElement.selectedOptions).map(
+        (option) => option.value
+      );
+    };
+
+    const obtenerTexto = (selector) => {
+      const inputElement = document.getElementById(selector);
+      return inputElement.value;
+    };
+
+    const crearPeli = function () {
+      let la_jungla = new Pelicula(
+        "tt0112864",
+        obtenerTexto("titulo"),
+        obtenerTexto("director"),
+        parseInt(obtenerTexto("anio")),
+        obtenerSeleccionados("pais"),
+        obtenerSeleccionados("genero"),
+        parseInt(obtenerSeleccionados("calificacion")[0]),
+        obtenerTexto("actores")
+          .split(",")
+          .map((actor) => actor.trim())
+      );
+      console.log(la_jungla);
+    };
+
+    document.getElementById("aniadir").addEventListener("click", crearPeli);
+  </script>
+</html>

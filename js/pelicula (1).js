@@ -20,13 +20,13 @@ class Pelicula {
     this.reparto = reparto;
   }
 
-  static paises = ["EEUU", "Portugal", "España"];
+  static paises = ["EEUU", "Portugal", "España", "Francia", "Italia"];
 
   static getPaises() {
     return Pelicula.paises;
   }
 
-  static generos = ["Terror", "Drama", "Comedia"];
+  static generos = ["Terror", "Drama", "Comedia", "Aventuras", "Bélica"];
 
   static getGeneros() {
     return Pelicula.generos;
