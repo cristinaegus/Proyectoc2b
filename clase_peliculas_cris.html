@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Clase Película</title>
+  </head>
+  <!--Programar la clase Película
+Sus atributos serán id (de IMBD), título , director , año de estreno , país de origen (pueden ser varios),
+género (pueden ser varios) y calificación (de IMBD).
+Todos estos atributos serán obligatorios.
+Validar que el id de IMBD tenga dos letras y 7 números.
+Validar que el título no tenga más de 100 caracteres.
+Validar que el director no tenga más de 50 caracteres.
+Validar que el año de estreno sea entre 1900 y fecha actual (2025).
+
+Crear un método estático que devuelva los países y géneros aceptables.
+Validar que el país y el género tengan forma de Array y contenga valores dentro de los valores
+aceptables
+Validar la calificación como entero entre 0 y 10.
+Crear un método que devuelva la ficha técnica de la película. (un resumen en una tabla)
+-->
+  <body>
+    <h1>Ejercicio de clases</h1>
+    <h2>Ficha Tecnica de Pélicula</h2>
+    <div id="fichaTecnica"></div>
+    <h3>Seleccionar Países</h3>
+    <select name="pais" id="pais" multiple>
+      <option value="" disabled selected>Seleccione un país</option>
+    </select>
+
+    <button type="button" id="aniadir">Añadir</button>
+    <script type="module">
+      import { Pelicula } from "./js/peliculaCris.js";
+
+      try {
+        const pelicula = new Pelicula(
+          "AB1234567", // ID de IMBD
+          "El Gran Escape", // Título
+          "John Sturges", // Director
+          1963, // Año de estreno
+          ["Estados Unidos", "Reino Unido"], // País de origen (pueden ser varios)
+          ["Acción", "Drama"], // Género (pueden ser varios)
+          8.5 // Calificación (de IMBD)
+        );
+        document.getElementById("fichaTecnica").innerHTML =
+          pelicula.fichaTecnica();
+      } catch (error) {
+        console.error(error.message);
+      }
+      // Exportar la instancia de película para su uso en otros módulos
+      // Definición de la clase Pelicula
+
+      // Validar que el id de IMBD tenga dos letras y 7 números
+    </script>
+  </body>
+</html>

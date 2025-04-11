@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ejercicio de clases</title>
+  </head>
+  <body>
+    <h1>Ejercicio de clases</h1>
+    <select name="pais" id="pais" multiple>
+      <option value="" disabled selected>Seleccione un país</option>
+    </select>
+    <button type="button" id="aniadir">Añadir</button>
+  </body>
+  <script type="module">
+    import { Pelicula } from "./js/pelicula.js";
+    const paises = Pelicula.getPaises();
+
+    let selectorPaises = document.getElementById("pais");
+    paises.forEach((pais) => {
+      let opcionPais = document.createElement("option");
+      opcionPais.setAttribute("value", pais);
+      opcionPais.textContent = pais;
+      selectorPaises.appendChild(opcionPais);
+    });
+
+    // Paises seleccionados como objeto global actualizándose
+    let paisesSeleccionados = [];
+    // Capturar los valores seleccionados y actualizar el array 'origen'
+    selectorPaises.addEventListener("change", () => {
+      // Obtener los países seleccionados
+      paisesSeleccionados = Array.from(selectorPaises.selectedOptions).map(
+        (option) => option.value
+      );
+    });
+
+    // Obtener los elementos seleccionados
+    /* const obtenerSeleccionados = (selector) => {
+      const selectElement = document.getElementById(selector);
+      return Array.from(selectElement.selectedOptions).map(
+        (option) => option.value
+      );
+    }; */
+
+    const crearPeli = function () {
+      let la_jungla = new Pelicula(
+        "tt0112864",
+        "La jungla de Cristal (La Venganza)",
+        "John McTiernan",
+        "1995",
+        paisesSeleccionados,
+        ["Acción", "Thriller"],
+        8,
+        ["Bruce Willis"]
+      );
+      console.log(la_jungla);
+    };
+
+    document.getElementById("aniadir").addEventListener("click", crearPeli);
+  </script>
+</html>
