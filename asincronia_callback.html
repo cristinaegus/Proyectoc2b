@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Callbacks</title>
+  </head>
+  <body>
+    <select name="" id="pares_o_nones">
+      <option value="pares">Pares</option>
+      <option value="nones">Impares</option>
+    </select>
+    <button id="disparador">Llama BaseDatos</button>
+    <table id="tabla" border="1"></table>
+    <script type="module">
+      import { baseDatos } from "./js/baseDatos.js";
+      // Función para actualizar la tabla (manipulación del DOM)
+      function actualizarTabla(datos) {
+        const tabla = document.getElementById("tabla");
+        tabla.innerHTML = ""; // Limpiar la tabla
+        datos.forEach((numero) => {
+          const fila = document.createElement("tr");
+          const celda = document.createElement("td");
+          celda.textContent = numero;
+          fila.appendChild(celda);
+          tabla.appendChild(fila);
+        });
+      }
+      // Evento para llamar a la base de datos
+      document.getElementById("disparador").addEventListener("click", () => {
+        let eleccion = document.getElementById("pares_o_nones").value;
+        // Llamamos a baseDatos y le pasamos actualizarTabla como callback
+        baseDatos(eleccion, actualizarTabla);
+
+        //Ejemplo con callbacks 1
+
+        console.log("Petición realizada");
+        console.log("Voy haciendo otras cosas");
+      });
+    </script>
+  </body>
+</html>
