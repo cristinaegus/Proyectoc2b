@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alumnos</title>
+  </head>
+  <body>
+    <h1>Formulario escuela</h1>
+    <label for="nombre">Nombre: </label>
+    <input type="text" name="nombre" id="nombre" />
+    <label for="nombre">Apellidos: </label>
+    <input type="text" name="apellidos" id="apellidos" />
+    <br /><label for="dni">DNI: </label>
+    <input type="text" name="dni" id="dni" />
+    <label for="nombre">Edad</label>
+    <input type="number" name="edad" id="edad" />
+    <br /><label for="curso">Curso: </label>
+    <select name="curso" id="curso">
+      <option value="curso1">Curso1</option>
+      <option value="curso2">Curso2</option>
+      <option value="curso3">Curso3</option>
+      <option value="curso4">Curso4</option>
+      <option value="curso5">Curso5</option>
+    </select>
+    <button type="button" id="carga_datos">Aceptar</button>
+    <button type="button" id="renderiza_tabla">Obtener tabla de datos</button>
+    <table id="tabla_alumnos"></table>
+  </body>
+  <script>
+    let lista_alumnos = JSON.parse(localStorage.getItem("lista_alumnos")) || [];
+
+    const verifica_edad = function (edad) {
+      edad = parseInt(edad);
+      if (edad >= 18 && edad <= 120) {
+        return edad;
+      } else {
+        throw new Error("La edad está fuera del rango");
+      }
+    };
+
+    const verifica_dni = function (dni) {
+      dni = dni.toUpperCase();
+      console.log(dni);
+      const expresion = new RegExp("^\\d{8}[A-Z]$");
+      //const expresion = /^\d{8}[A-Z]$/; // Expresión regular corregida
+      if (expresion.test(dni)) {
+        return dni;
+      } else {
+        throw new Error("El DNI no es correcto");
+      }
+    };
+
+    const cargar_datos = function () {
+      let alumno = {};
+      alumno.nombre = document.getElementById("nombre").value;
+      alumno.apellidos = document.getElementById("apellidos").value;
+      try {
+        alumno.dni = verifica_dni(document.getElementById("dni").value);
+        alumno.edad = verifica_edad(document.getElementById("edad").value);
+        alumno.curso = document.getElementById("curso").value;
+        console.log(alumno);
+        lista_alumnos.push(alumno);
+        localStorage.setItem("lista_alumnos", JSON.stringify(lista_alumnos));
+      } catch (error) {
+        window.alert(error.message);
+        console.error(error);
+      }
+    };
+
+    const renderizar_tabla = function () {
+      console.log(lista_alumnos);
+      lista_alumnos.forEach((element) => {
+        console.log(element.nombre);
+      });
+    };
+
+    document
+      .getElementById("carga_datos")
+      .addEventListener("click", cargar_datos);
+
+    document
+      .getElementById("renderiza_tabla")
+      .addEventListener("click", renderizar_tabla);
+  </script>
+</html>
