@@ -170,6 +170,8 @@
 
       // Crear una nueva tabla
       const tabla = document.createElement("table");
+      tabla.setAttribute("style", "border-collapse: collapse; width: 100%;");
+      tabla.setAttribute("border", "1"); // Agrega bordes a la tabla
       const encabezado = document.createElement("tr");
       encabezado.innerHTML = `
     <th>Título</th>

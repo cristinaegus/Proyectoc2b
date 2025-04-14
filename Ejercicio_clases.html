@@ -61,9 +61,54 @@
     </select>
 
     <button type="button" id="aniadir">Añadir Película</button>
+    <button type="button" id="poblar_tabla">Actualizar tabla</button>
+    <hr />
+    <table>
+      <thead>
+        <th>Título</th>
+        <th>Director</th>
+        <th>Año</th>
+        <th>País</th>
+        <th>Género</th>
+        <th>Calificación</th>
+        <th>Actores</th>
+      </thead>
+      <tbody id="tabla_pelis"></tbody>
+    </table>
   </body>
   <script type="module">
     import { Pelicula } from "./js/pelicula.js";
+
+    let lista_pelis = JSON.parse(localStorage.getItem("peliculas")) || [];
+
+    // Mostrar películas existentes al cargar la página
+    function mostrarPeliculas() {
+      const tabla = document.getElementById("tabla_pelis");
+      tabla.innerHTML = ""; // Limpiar tabla
+
+      lista_pelis.forEach((peli) => {
+        const row = document.createElement("tr");
+        console.log(peli);
+
+        // Asegúrate de que las propiedades coincidan con tu clase Pelicula
+        row.innerHTML = `
+                <td>${peli.titulo}</td>
+                <td>${peli.director}</td>
+                <td>${peli.estreno}</td>
+                <td>${peli.origen.join(", ")}</td>
+                <td>${peli.genero.join(", ")}</td>
+                <td>${peli.calificacion}</td>
+                <td>${peli.reparto.join(", ")}</td>
+            `;
+
+        tabla.appendChild(row);
+      });
+    }
+
+    // Llamar a mostrarPeliculas al cargar la página
+    document
+      .getElementById("poblar_tabla")
+      .addEventListener("click", mostrarPeliculas);
 
     // Definir los valores aceptables con selectores
     const paises = Pelicula.getPaises();
@@ -98,7 +143,7 @@
     };
 
     const crearPeli = function () {
-      let la_jungla = new Pelicula(
+      let la_peli = new Pelicula(
         "tt0112864",
         obtenerTexto("titulo"),
         obtenerTexto("director"),
@@ -110,7 +155,9 @@
           .split(",")
           .map((actor) => actor.trim())
       );
-      console.log(la_jungla);
+      console.log(la_peli);
+      lista_pelis.push(la_peli);
+      localStorage.setItem("peliculas", JSON.stringify(lista_pelis));
     };
 
     document.getElementById("aniadir").addEventListener("click", crearPeli);
