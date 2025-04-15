@@ -39,6 +39,7 @@
     let lista_alumnos = JSON.parse(localStorage.getItem("lista_alumnos")) || [];
 
     // Función para cargar los datos del formulario
+    //guardar las peliculas en una lista de alumnos
     const cargar_datos = function () {
       let alumno = {};
       alumno.nombre = document.getElementById("nombre").value;
@@ -59,7 +60,7 @@
 
       // Agregar el alumno a la lista
       lista_alumnos.push(alumno);
-
+      //hacer que la lista de alumnos tenga persistencia en el navegador
       // Guardar la lista en el Local Storage
       localStorage.setItem("lista_alumnos", JSON.stringify(lista_alumnos));
 
@@ -67,7 +68,8 @@
       console.log(alumno);
     };
 
-    // Función para renderizar la tabla
+    // renderizar la información de los alumnos en una tabla,
+    // que contenga los encabezados de la tabla procedan de los campos del objeto
     const renderizar_tabla = function () {
       let tabla = "<table border='1'>";
       tabla +=
