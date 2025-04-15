@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario Cris</title>
+</head>
+<body>
+    <h1>Mi club privado</h1>
+    <form id="formulario">
+        <label for="nombre">Nombre</label>
+        <input type="text" name="nombre" id="nombre" placeholder="Introduzca el nombre" maxlength="100" required />
+        
+        <label for="apellido">Apellido</label>
+        <input type="text" name="apellido" id="apellido" placeholder="Introduzca el apellido" maxlength="50" required />
+        
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" placeholder="Introduzca el email" maxlength="100" required />
+        
+        <label for="telefono">Teléfono</label>
+        <input type="tel" name="telefono" id="telefono" placeholder="Introduzca el teléfono" maxlength="15" required />
+        
+        <label for="mensaje">Mensaje</label>
+        <textarea name="mensaje" id="mensaje" placeholder="Introduzca su mensaje" maxlength="500" required></textarea>
+        
+        <button type="button" id="enviar">Enviar</button>
+    </form>
+
+    <table id="tabla" border="1">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Email</th>
+                <th>Teléfono</th>
+                <th>Mensaje</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <script>
+        // Capturar el botón y el formulario
+        const botonEnviar = document.getElementById("enviar");
+        const formulario = document.getElementById("formulario");
+        const tabla = document.getElementById("tabla").querySelector("tbody");
+
+        // Evento para capturar los datos y renderizar la tabla
+        botonEnviar.addEventListener("click", function (event) {
+            event.preventDefault(); // Evitar el comportamiento predeterminado
+
+            // Capturar los datos del formulario
+            const nombre = document.getElementById("nombre").value;
+            const apellido = document.getElementById("apellido").value;
+            const email = document.getElementById("email").value;
+            const telefono = document.getElementById("telefono").value;
+            const mensaje = document.getElementById("mensaje").value;
+
+            // Validar que todos los campos estén llenos
+            if (!nombre || !apellido || !email || !telefono || !mensaje) {
+                alert("Por favor, complete todos los campos.");
+                return;
+            }
+
+            // Crear una nueva fila en la tabla
+            const nuevaFila = document.createElement("tr");
+            nuevaFila.innerHTML = `
+                <td>${nombre}</td>
+                <td>${apellido}</td>
+                <td>${email}</td>
+                <td>${telefono}</td>
+                <td>${mensaje}</td>
+            `;
+            tabla.appendChild(nuevaFila);
+
+            // Limpiar el formulario después de enviar
+            formulario.reset();
+
+            // Mostrar mensaje de confirmación
+            alert("Los datos se han añadido a la tabla.");
+        });
+    </script>
+</body>
+</html>
