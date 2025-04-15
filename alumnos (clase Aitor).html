@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alumnos</title>
+  </head>
+  <body>
+    <h1>Formulario escuela</h1>
+    <label for="nombre">Nombre: </label>
+    <input type="text" name="nombre" id="nombre" />
+    <label for="nombre">Apellidos: </label>
+    <input type="text" name="apellidos" id="apellidos" />
+    <br /><label for="dni">DNI: </label>
+    <input type="text" name="dni" id="dni" />
+    <label for="nombre">Edad</label>
+    <input type="number" name="edad" id="edad" />
+    <br /><label for="curso">Curso: </label>
+    <select name="curso" id="curso">
+      <option value="curso1">Curso1</option>
+      <option value="curso2">Curso2</option>
+      <option value="curso3">Curso3</option>
+      <option value="curso4">Curso4</option>
+      <option value="curso5">Curso5</option>
+    </select>
+    <button type="button" id="carga_datos">Aceptar</button>
+    <button type="button" id="renderiza_tabla">Obtener tabla de datos</button>
+    <table id="tabla_alumnos"></table>
+  </body>
+  <script>
+    let lista_alumnos = JSON.parse(localStorage.getItem("lista_alumnos")) || [];
+
+    class Alumno {
+      constructor(nombre, apellidos, dni, edad, curso) {
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.dni = this.verifica_dni(dni);
+        this.edad = this.verifica_edad(edad);
+        this.curso = curso;
+      }
+
+      verifica_dni(dni) {
+        dni = dni.toUpperCase();
+        console.log(dni);
+        const expresion = new RegExp("^\\d{8}[A-Z]$");
+        //const expresion = /^\d{8}[A-Z]$/; // Expresión regular corregida
+        if (expresion.test(dni)) {
+          return dni;
+        } else {
+          throw new Error("El DNI no es correcto");
+        }
+      }
+
+      verifica_edad(edad) {
+        edad = parseInt(edad);
+        if (edad >= 18 && edad <= 120) {
+          return edad;
+        } else {
+          throw new Error("La edad está fuera del rango");
+        }
+      }
+    }
+
+    lista_alumnos = lista_alumnos.map(
+      (a) => new Alumno(a.nombre, a.apellidos, a.dni, a.edad, a.curso)
+    );
+
+    const cargar_datos = function () {
+      let nombre = document.getElementById("nombre").value;
+      let apellidos = document.getElementById("apellidos").value;
+      let dni = document.getElementById("dni").value;
+      let edad = document.getElementById("edad").value;
+      let curso = document.getElementById("curso").value;
+      try {
+        alumno = new Alumno(nombre, apellidos, dni, edad, curso);
+        console.log(alumno);
+        lista_alumnos.push(alumno);
+        localStorage.setItem("lista_alumnos", JSON.stringify(lista_alumnos));
+      } catch (error) {
+        window.alert(error.message);
+        console.error(error);
+      }
+    };
+
+    const crear_encabezado = function (claves) {
+      let tabla = document.getElementById("tabla_alumnos");
+      let encabezado = document.createElement("thead");
+      claves.forEach((clave) => {
+        let casilla = document.createElement("th");
+        casilla.innerText =
+          String(clave).charAt(0).toUpperCase() + String(clave).slice(1);
+        encabezado.appendChild(casilla);
+      });
+      tabla.appendChild(encabezado);
+    };
+
+    const renderizar_tabla = function () {
+      let tabla = document.getElementById("tabla_alumnos");
+      tabla.innerHTML = "";
+      if (lista_alumnos.length === 0) {
+        tabla.innerHTML =
+          "<tr><td colspan='5'>No hay alumnos registrados</td></tr>";
+      }
+      crear_encabezado(Object.keys(lista_alumnos[0]));
+      let cuerpo = document.createElement("tbody");
+      lista_alumnos.forEach((alumno) => {
+        let fila = document.createElement("tr");
+        let valores = Object.values(alumno);
+        valores.forEach((valor) => {
+          let casilla = document.createElement("td");
+          casilla.innerText = valor;
+          fila.appendChild(casilla);
+        });
+        cuerpo.appendChild(fila);
+        //for (let clave in alumno) {
+        //console.log(`${clave}: ${alumno[clave]}`);
+        //}
+      });
+      tabla.appendChild(cuerpo);
+    };
+
+    document
+      .getElementById("carga_datos")
+      .addEventListener("click", cargar_datos);
+
+    document
+      .getElementById("renderiza_tabla")
+      .addEventListener("click", renderizar_tabla);
+  </script>
+</html>

@@ -53,6 +53,7 @@
 
     const cargar_datos = function () {
       let alumno = {};
+
       alumno.nombre = document.getElementById("nombre").value;
       alumno.apellidos = document.getElementById("apellidos").value;
       try {
@@ -68,11 +69,41 @@
       }
     };
 
-    const renderizar_tabla = function () {
-      console.log(lista_alumnos);
-      lista_alumnos.forEach((element) => {
-        console.log(element.nombre);
+    const crear_encabezado = function (claves) {
+      let tabla = document.getElementById("tabla_alumnos");
+      let encabezado = document.createElement("thead");
+      claves.forEach((clave) => {
+        let casilla = document.createElement("th");
+        casilla.innerText =
+          String(clave).charAt(0).toUpperCase() + String(clave).slice(1);
+        encabezado.appendChild(casilla);
       });
+      tabla.appendChild(encabezado);
+    };
+
+    const renderizar_tabla = function () {
+      let tabla = document.getElementById("tabla_alumnos");
+      tabla.innerHTML = "";
+      if (lista_alumnos.length === 0) {
+        tabla.innerHTML =
+          "<tr><td colspan='5'>No hay alumnos registrados</td></tr>";
+      }
+      crear_encabezado(Object.keys(lista_alumnos[0]));
+      let cuerpo = document.createElement("tbody");
+      lista_alumnos.forEach((alumno) => {
+        let fila = document.createElement("tr");
+        let valores = Object.values(alumno);
+        valores.forEach((valor) => {
+          let casilla = document.createElement("td");
+          casilla.innerText = valor;
+          fila.appendChild(casilla);
+        });
+        cuerpo.appendChild(fila);
+        //for (let clave in alumno) {
+        //console.log(`${clave}: ${alumno[clave]}`);
+        //}
+      });
+      tabla.appendChild(cuerpo);
     };
 
     document

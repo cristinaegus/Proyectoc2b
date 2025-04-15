@@ -68,19 +68,34 @@
       console.log(alumno);
     };
 
+    // Función para crear el encabezado de la tabla
+    const crear_encabezado = function (objeto) {
+      let encabezado = "<tr>";
+      for (let clave in objeto) {
+        encabezado += `<th>${
+          clave.charAt(0).toUpperCase() + clave.slice(1)
+        }</th>`;
+      }
+      encabezado += "</tr>";
+      return encabezado;
+    };
+
     // renderizar la información de los alumnos en una tabla,
     // que contenga los encabezados de la tabla procedan de los campos del objeto
     const renderizar_tabla = function () {
+      if (lista_alumnos.length === 0) {
+        alert("No hay alumnos para mostrar.");
+        return;
+      }
+
       let tabla = "<table border='1'>";
-      tabla +=
-        "<tr><th>Nombre</th><th>Apellidos</th><th>DNI</th><th>Edad</th><th>Curso</th></tr>";
+      tabla += crear_encabezado(lista_alumnos[0]);
+
       for (let i = 0; i < lista_alumnos.length; i++) {
         tabla += "<tr>";
-        tabla += `<td>${lista_alumnos[i].nombre}</td>`;
-        tabla += `<td>${lista_alumnos[i].apellidos}</td>`;
-        tabla += `<td>${lista_alumnos[i].dni}</td>`;
-        tabla += `<td>${lista_alumnos[i].edad}</td>`;
-        tabla += `<td>${lista_alumnos[i].curso}</td>`;
+        for (let clave in lista_alumnos[i]) {
+          tabla += `<td>${lista_alumnos[i][clave]}</td>`;
+        }
         tabla += "</tr>";
       }
       tabla += "</table>";
