@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alumnos</title>
+  </head>
+  <body>
+    <h1>Formulario escuela</h1>
+    <label for="nombre">Nombre: </label>
+    <input type="text" name="nombre" id="nombre" />
+    <label for="nombre">Apellidos: </label>
+    <input type="text" name="apellidos" id="apellidos" />
+    <br /><label for="dni">DNI: </label>
+    <input type="text" name="dni" id="dni" />
+    <label for="nombre">Edad</label>
+    <input type="number" name="edad" id="edad" />
+    <br /><label for="curso">Curso: </label>
+    <select name="curso" id="curso"></select>
+    <button type="button" id="carga_datos">Aceptar</button>
+    <button type="button" id="renderiza_tabla">Obtener tabla de datos</button>
+    <div id="resumen"></div>
+    <table id="tabla_alumnos"></table>
+  </body>
+  <script type="module">
+    import { baseDatos } from "./js/baseDatosAlumnos.js";
+    // let lista_alumnos = JSON.parse(localStorage.getItem("lista_alumnos")) || [];
+
+    class Alumno {
+      constructor(nombre, apellidos, dni, edad, curso) {
+        this.nombre = nombre;
+        this.apellidos = apellidos;
+        this.dni = this.verifica_dni(dni);
+        this.edad = this.verifica_edad(edad);
+        this.curso = curso;
+      }
+
+      static cursosDisponibles = [
+        "curso1",
+        "curso2",
+        "curso3",
+        "curso4",
+        "curso5",
+      ];
+
+      resumen() {
+        return `El alumno ${this.nombre} ${this.apellidos} con DNI ${this.dni} tiene ${this.edad} años y está inscrito en el curso ${this.curso} `;
+      }
+
+      verifica_dni(dni) {
+        dni = dni.toUpperCase();
+        console.log(dni);
+        const expresion = new RegExp("^\\d{8}[A-Z]$");
+        //const expresion = /^\d{8}[A-Z]$/; // Expresión regular corregida
+        if (expresion.test(dni)) {
+          return dni;
+        } else {
+          throw new Error("El DNI no es correcto");
+        }
+      }
+
+      verifica_edad(edad) {
+        edad = parseInt(edad);
+        if (edad >= 18 && edad <= 120) {
+          return edad;
+        } else {
+          throw new Error("La edad está fuera del rango");
+        }
+      }
+    }
+
+    const mapeo_alumnos = function (lista_alumnos) {
+      return lista_alumnos.map(
+        (a) => new Alumno(a.nombre, a.apellidos, a.dni, a.edad, a.curso)
+      );
+    };
+
+    let lista_alumnos = []; // ahora la llenamos en el callback
+
+    // Simulación de la carga de datos desde la base de datos con callbacks
+    /*
+    baseDatos(mapeo_alumnos, function (resultado) {
+      lista_alumnos = resultado;
+      console.log("Ya tenemos los datos:", lista_alumnos);
+    }); 
+    */
+
+    // Simulación de la carga de datos desde la base de datos con then y catch
+    /* 
+    baseDatos()
+      .then((resultado) => {
+        lista_alumnos = mapeo_alumnos(resultado);
+        console.log("Ya tenemos los datos:", lista_alumnos);
+      })
+      .catch((error) => {
+        console.error("Error al cargar los datos:", error);
+      }); 
+    */
+
+    // Simulación de la carga de datos desde la base de datos con async/await
+    const cargarDatos = async () => {
+      try {
+        const resultado = await baseDatos();
+        lista_alumnos = mapeo_alumnos(resultado);
+        console.log("Ya tenemos los datos:", lista_alumnos);
+      } catch (error) {
+        console.error("Error al cargar los datos:", error);
+      }
+    };
+    cargarDatos();
+
+    // Poblar el select de cursos
+    const selectCurso = document.getElementById("curso");
+    Alumno.cursosDisponibles.forEach((curso) => {
+      const option = document.createElement("option");
+      option.value = curso;
+      option.textContent =
+        String(curso).charAt(0).toUpperCase() + String(curso).slice(1) + "º";
+      selectCurso.appendChild(option);
+    });
+
+    const cargar_datos = function () {
+      let nombre = document.getElementById("nombre").value;
+      let apellidos = document.getElementById("apellidos").value;
+      let dni = document.getElementById("dni").value;
+      let edad = document.getElementById("edad").value;
+      let curso = document.getElementById("curso").value;
+      try {
+        let alumno = new Alumno(nombre, apellidos, dni, edad, curso);
+        console.log(alumno);
+        lista_alumnos.push(alumno);
+        localStorage.setItem("lista_alumnos", JSON.stringify(lista_alumnos));
+      } catch (error) {
+        window.alert(error.message);
+        console.error(error);
+      }
+    };
+
+    const crear_encabezado = function (claves) {
+      let tabla = document.getElementById("tabla_alumnos");
+      let encabezado = document.createElement("thead");
+      claves.forEach((clave) => {
+        let casilla = document.createElement("th");
+        casilla.innerText =
+          String(clave).charAt(0).toUpperCase() + String(clave).slice(1);
+        encabezado.appendChild(casilla);
+      });
+      let casilla = document.createElement("th");
+      casilla.innerText = "Obtener resumen";
+      encabezado.appendChild(casilla);
+      tabla.appendChild(encabezado);
+    };
+
+    const renderizar_resumen = function (indice) {
+      let div_resumen = document.getElementById("resumen");
+      let texto_resumen = lista_alumnos[indice].resumen();
+      div_resumen.innerText = texto_resumen;
+    };
+
+    const renderizar_tabla = function () {
+      let tabla = document.getElementById("tabla_alumnos");
+      tabla.innerHTML = "";
+      if (lista_alumnos.length === 0) {
+        tabla.innerHTML =
+          "<tr><td colspan='5'>No hay alumnos registrados</td></tr>";
+      }
+      crear_encabezado(Object.keys(lista_alumnos[0]));
+      let cuerpo = document.createElement("tbody");
+      lista_alumnos.forEach((alumno, indice) => {
+        let fila = document.createElement("tr");
+        let valores = Object.values(alumno);
+        valores.forEach((valor) => {
+          let casilla = document.createElement("td");
+          casilla.innerText = valor;
+          fila.appendChild(casilla);
+        });
+        let casilla = document.createElement("td");
+        let boton = document.createElement("button");
+        boton.innerText = "Obtener resumen";
+        boton.addEventListener("click", () => {
+          renderizar_resumen(indice);
+        });
+        casilla.appendChild(boton);
+        fila.appendChild(casilla);
+        cuerpo.appendChild(fila);
+      });
+      tabla.appendChild(cuerpo);
+    };
+
+    document
+      .getElementById("carga_datos")
+      .addEventListener("click", cargar_datos);
+
+    document
+      .getElementById("renderiza_tabla")
+      .addEventListener("click", renderizar_tabla);
+  </script>
+</html>
