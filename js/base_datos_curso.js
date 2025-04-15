@@ -93,6 +93,10 @@ const renderizar_tabla = function () {
     const celdaBoton = document.createElement("td");
     celdaBoton.appendChild(botonResumen);
     fila.appendChild(celdaBoton);
+    const botonBorrar = crear_boton_borrar(fila);
+    const celdaBorrar = document.createElement("td");
+    celdaBorrar.appendChild(botonBorrar);
+    fila.appendChild(celdaBorrar);
   });
 };
 
@@ -115,6 +119,19 @@ const crear_boton_resumen = function (alumno) {
     resumenDiv.textContent = resumen;
     resumenDiv.style.marginTop = "10px";
     document.body.appendChild(resumenDiv);
+  });
+  return boton;
+};
+//añade un boton de borrar a la derecha de cada fila de la tabla que al pulsarlo borra la fila
+const crear_boton_borrar = function (fila) {
+  const boton = document.createElement("button");
+  boton.className = "boton_borrar";
+  boton.textContent = "Borrar";
+  boton.addEventListener("click", function () {
+    fila.remove();
+    // Actualiza el localStorage después de borrar
+    lista_alumnos = lista_alumnos.filter((alumno) => alumno !== fila);
+    localStorage.setItem("lista_alumnos", JSON.stringify(lista_alumnos));
   });
   return boton;
 };
