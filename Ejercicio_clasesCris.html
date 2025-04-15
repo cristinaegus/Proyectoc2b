@@ -45,10 +45,11 @@
 
     <!-- Selector para el país -->
 
-    
     <label for="pais">Seleccione uno o más países:</label>
     <select name="pais" id="pais" multiple>
-      <option value ="^[Argentina|Brasil|Chile|México|España]$" disabled>Seleccione países</option>
+      <option value="^[Argentina|Brasil|Chile|México|España]$" disabled>
+        Seleccione países
+      </option>
       <option value="Argentina">Argentina</option>
       <option value="Brasil">Brasil</option>
       <option value="Chile">Chile</option>
@@ -65,7 +66,7 @@
       <option value="Comedia">Comedia</option>
       <option value="Drama">Drama</option>
       <option value="Terror">Terror</option>
-      <option value="Ciencia Ficción">Ciencia Ficción</option>  
+      <option value="Ciencia Ficción">Ciencia Ficción</option>
     </select>
 
     <label for="calificacion">Seleccione la calificación:</label>
@@ -90,7 +91,7 @@
     const paises = Pelicula.getPaises();
     const generos = Pelicula.getGeneros(); // Corregido de pelicula a Pelicula
     const calificaciones = Pelicula.getCalificaciones(); // Actualizado para usar el método estático
-    const calificacionesNumericas= Array.from({ length: 10 }, (_, i) => i + 1); // [1, 2, ..., 10]
+    const calificacionesNumericas = Array.from({ length: 10 }, (_, i) => i + 1); // [1, 2, ..., 10]
 
     const poblarSelector = function (identificador, opciones) {
       let selector = document.getElementById(identificador);
@@ -104,7 +105,6 @@
 
     // Poblar los selectores con los valores aceptables
     poblarSelector("pais", paises);
-  
 
     poblarSelector("genero", generos);
 
@@ -116,65 +116,64 @@
         (option) => option.value
       );
     };
-    
 
     const obtenerTexto = (selector) => {
       const inputElement = document.getElementById(selector);
       return inputElement.value;
     };
 
-    
+    // Array para almacenar las películas creadas
+    const peliculas = [];
 
-// Array para almacenar las películas creadas
-const peliculas = [];
+    // Función para crear una nueva película
+    const crearPeli = () => {
+      const titulo = obtenerTexto("titulo");
+      const director = obtenerTexto("director");
+      const anio = obtenerTexto("anio");
+      const actores = obtenerTexto("actores");
+      const paisesSeleccionados = obtenerSeleccionados("pais");
+      const generosSeleccionados = obtenerSeleccionados("genero");
+      const calificacion = obtenerTexto("calificacion");
 
-// Función para crear una nueva película
-const crearPeli = () => {
-  const titulo = obtenerTexto("titulo");
-  const director = obtenerTexto("director");
-  const anio = obtenerTexto("anio");
-  const actores = obtenerTexto("actores");
-  const paisesSeleccionados = obtenerSeleccionados("pais");
-  const generosSeleccionados = obtenerSeleccionados("genero");
-  const calificacion = obtenerTexto("calificacion");
+      if (!titulo || !director || !anio || !actores || !calificacion) {
+        alert("Por favor, complete todos los campos obligatorios.");
+        return;
+      }
 
-  if (!titulo || !director || !anio || !actores || !calificacion) {
-    alert("Por favor, complete todos los campos obligatorios.");
-    return;
-  }
+      const nuevaPelicula = {
+        titulo,
+        director,
+        anio,
+        actores,
+        paises: paisesSeleccionados,
+        generos: generosSeleccionados,
+        calificacion,
+      };
 
-  const nuevaPelicula = {
-    titulo,
-    director,
-    anio,
-    actores,
-    paises: paisesSeleccionados,
-    generos: generosSeleccionados,
-    calificacion,
-  };
+      // Añadir la nueva película al array
+      peliculas.push(nuevaPelicula);
 
-  // Añadir la nueva película al array
-  peliculas.push(nuevaPelicula);
+      // Renderizar la tabla con las películas actualizadas
+      renderizarTabla(peliculas);
 
-  // Renderizar la tabla con las películas actualizadas
-  renderizarTabla(peliculas);
+      console.log("Película añadida:", nuevaPelicula);
+      alert("Película añadida exitosamente.");
+    };
 
-  console.log("Película añadida:", nuevaPelicula);
-  alert("Película añadida exitosamente.");
-};
+    // Función para renderizar la tabla
+    const renderizarTabla = (peliculas) => {
+      // Eliminar la tabla existente si ya está renderizada
+      const tablaExistente = document.querySelector("table");
+      if (tablaExistente) {
+        tablaExistente.remove();
+      }
 
-// Función para renderizar la tabla
-const renderizarTabla = (peliculas) => {
-  // Eliminar la tabla existente si ya está renderizada
-  const tablaExistente = document.querySelector("table");
-  if (tablaExistente) {
-    tablaExistente.remove();
-  }
-
-  // Crear una nueva tabla
-  const tabla = document.createElement("table");
-  const encabezado = document.createElement("tr");
-  encabezado.innerHTML = `
+      // Crear una nueva tabla
+      const tabla = document.createElement("table");
+      tabla.setAttribute("style", "border-collapse: collapse; width: 100%;");
+      tabla.setAttribute("border", "1"); // Agrega bordes a la tabla
+      const encabezado = document.createElement("tr");
+      encabezado.innerHTML = `
     <th>Título</th>
     <th>Director</th>
     <th>Año</th>
@@ -183,12 +182,12 @@ const renderizarTabla = (peliculas) => {
     <th>Géneros</th>
     <th>Calificación</th>
   `;
-  tabla.appendChild(encabezado);
+      tabla.appendChild(encabezado);
 
-  // Añadir las filas de las películas
-  peliculas.forEach((pelicula) => {
-    const fila = document.createElement("tr");
-    fila.innerHTML = `
+      // Añadir las filas de las películas
+      peliculas.forEach((pelicula) => {
+        const fila = document.createElement("tr");
+        fila.innerHTML = `
       <td>${pelicula.titulo}</td>
       <td>${pelicula.director}</td>
       <td>${pelicula.anio}</td>
@@ -197,14 +196,14 @@ const renderizarTabla = (peliculas) => {
       <td>${pelicula.generos.join(", ")}</td>
       <td>${pelicula.calificacion}</td>
     `;
-    tabla.appendChild(fila);
-  });
+        tabla.appendChild(fila);
+      });
 
-  // Añadir la tabla al cuerpo del documento
-  document.body.appendChild(tabla);
-};
+      // Añadir la tabla al cuerpo del documento
+      document.body.appendChild(tabla);
+    };
 
-// Asociar el evento al botón "Añadir Película"
-document.getElementById("aniadir").addEventListener("click", crearPeli);
+    // Asociar el evento al botón "Añadir Película"
+    document.getElementById("aniadir").addEventListener("click", crearPeli);
   </script>
 </html>

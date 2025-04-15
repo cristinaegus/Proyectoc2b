@@ -33,7 +33,7 @@ export class Pelicula {
     this.pelicula = pelicula;
   }
   static paises = ["Argentina", "Brasil", "Chile", "México", "España"];
-  
+
   static inicializarPaises() {
     poblarSelector("pais", this.getPaises());
   }
@@ -41,7 +41,7 @@ export class Pelicula {
     return ["A", "B", "C", "D", "E"];
   }
   static calificaciones = ["A", "B", "C", "D", "E"];
-  
+
   static getCalificacionesConst() {
     return this.calificaciones;
   }
@@ -78,4 +78,3 @@ export class Pelicula {
     }
   }
 }
-

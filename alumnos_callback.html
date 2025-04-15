@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alumnos</title>
+  </head>
+  <body>
+    <h1>Formulario escuela</h1>
+    <label for="nombre">Nombre: </label>
+    <input type="text" name="nombre" id="nombre" />
+    <label for="apellidos">Apellidos: </label>
+    <input type="text" name="apellidos" id="apellidos" />
+
+    <br /><label for="dni">DNI: </label>
+    <input type="text" name="dni" id="dni" />
+    <label for="edad">Edad</label>
+    <input type="number" name="edad" id="edad" />
+    <br /><label for="curso"></label>
+    <select name="curso" id="curso"></select>
+    <button type="button" id="carga_datos">Aceptar</button>
+    <button type="button" id="renderiza_tabla">Obtener tabla de datos</button>
+    <table id="tabla_alumnos" border="1"></table>
+  </body>
+  <script type="module">
+    import { Alumno } from "./js/base_datos_curso.js";
+  </script>
+</html>

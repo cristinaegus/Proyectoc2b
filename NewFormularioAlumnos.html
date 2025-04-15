@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Formulario Alumnos</title>
+  </head>
+  <body>
+    <!--Construir un formulario para introducir datos personales de alumnos:
+    Nombre
+    Apellidos
+    DNI
+    Edad
+    Curso (selector de cinco cursos)-->
+    <h1>Formulario de Alumnos</h1>
+    <label for="nombre">Nombre</label>
+    <input type="text" id="nombre" placeholder="Nombre" maxlength="50" />
+    <label for="apellidos">Apellidos</label>
+    <input type="text" id="apellidos" placeholder="Apellidos" maxlength="50" />
+    <label for="dni">DNI</label>
+    <input type="text" id="dni" placeholder="DNI" maxlength="9" />
+    <label for="edad">Edad</label>
+    <input type="number" id="edad" placeholder="Edad" min="1" max="120" />
+    <label for="curso">Curso</label>
+    <select name="curso" id="curso">
+      <option value="1">Curso 1</option>
+      <option value="2">Curso 2</option>
+      <option value="3">Curso 3</option>
+      <option value="4">Curso 4</option>
+      <option value="5">Curso 5</option>
+    </select>
+    <!-- Cambiar el tipo del botón a "button" -->
+    <button type="button" id="enviar">Enviar</button>
+    <button type="button" id="renderiza_tabla">Obtener tabla de datos</button>
+    <div id="tabla"></div>
+  </body>
+  <script>
+    // Crea una lista de alumnos vacía
+    let lista_alumnos = JSON.parse(localStorage.getItem("lista_alumnos")) || [];
+
+    // Función para cargar los datos del formulario
+    //guardar las peliculas en una lista de alumnos
+    const cargar_datos = function () {
+      let alumno = {};
+      alumno.nombre = document.getElementById("nombre").value;
+      alumno.apellidos = document.getElementById("apellidos").value;
+      alumno.dni = document.getElementById("dni").value;
+      alumno.edad = document.getElementById("edad").value;
+      alumno.curso = document.getElementById("curso").value;
+
+      // Validaciones
+      if (alumno.edad < 18 || alumno.edad > 120) {
+        alert("La edad debe estar entre 18 y 120 años");
+        return false;
+      }
+      if (!/^\d{8}[A-Z]$/.test(alumno.dni.toUpperCase())) {
+        alert("El DNI debe tener 8 dígitos y una letra");
+        return false;
+      }
+
+      // Agregar el alumno a la lista
+      lista_alumnos.push(alumno);
+      //hacer que la lista de alumnos tenga persistencia en el navegador
+      // Guardar la lista en el Local Storage
+      localStorage.setItem("lista_alumnos", JSON.stringify(lista_alumnos));
+
+      // Mostrar los datos en la consola
+      console.log(alumno);
+    };
+
+    // Función para crear el encabezado de la tabla
+    const crear_encabezado = function (objeto) {
+      let encabezado = "<tr>";
+      for (let clave in objeto) {
+        encabezado += `<th>${
+          clave.charAt(0).toUpperCase() + clave.slice(1)
+        }</th>`;
+      }
+      encabezado += "</tr>";
+      return encabezado;
+    };
+
+    // renderizar la información de los alumnos en una tabla,
+    // que contenga los encabezados de la tabla procedan de los campos del objeto
+    const renderizar_tabla = function () {
+      if (lista_alumnos.length === 0) {
+        alert("No hay alumnos para mostrar.");
+        return;
+      }
+
+      let tabla = "<table border='1'>";
+      tabla += crear_encabezado(lista_alumnos[0]);
+
+      for (let i = 0; i < lista_alumnos.length; i++) {
+        tabla += "<tr>";
+        for (let clave in lista_alumnos[i]) {
+          tabla += `<td>${lista_alumnos[i][clave]}</td>`;
+        }
+        tabla += "</tr>";
+      }
+      tabla += "</table>";
+      document.getElementById("tabla").innerHTML = tabla;
+    };
+
+    // Asociar el evento "click" del botón a la función cargar_datos
+    document.getElementById("enviar").addEventListener("click", cargar_datos);
+
+    // Asociar el evento "click" del botón a la función renderizar_tabla
+    document
+      .getElementById("renderiza_tabla")
+      .addEventListener("click", renderizar_tabla);
+  </script>
+</html>
