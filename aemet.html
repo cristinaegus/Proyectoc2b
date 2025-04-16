@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body></body>
+  <script>
+    const apiKey = "";
+    let url = `https://opendata.aemet.es/opendata/api/valores/climatologicos/inventarioestaciones/todasestaciones/?api_key=${apiKey}`;
+
+    fetch("./municipios.json")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("No se pudo cargar el archivo JSON");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        console.log("Contenido de municipios.json:", data);
+        console.log(
+          "Contenido de Álava.json:",
+          data.filter((m) => m.Provincia === "01")
+        );
+      })
+      .catch((error) => {
+        console.error("Error al leer municipios.json:", error);
+      });
+  </script>
+</html>

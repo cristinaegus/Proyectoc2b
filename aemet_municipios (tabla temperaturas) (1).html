@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mis predicciones</title>
+  </head>
+  <body>
+    <h1>La predicción del tiempo</h1>
+    <label for="provincia">Provincia: </label>
+    <select name="provincia" id="provincia">
+      <option value="" disabled selected>Elige una provincia</option>
+      <option value="48">Bizkaia</option>
+      <option value="20">Gipuzkoa</option>
+      <option value="01">Álava</option>
+    </select>
+    <select name="municipio" id="municipio"></select>
+    <button type="button" id="peticion">Obtener datos</button>
+    <div class="contenedor-tablas" style="display: flex">
+      <table id="temperaturas_hoy"></table>
+      <table id="temperaturas_mañana"></table>
+      <table id="temperaturas_pasado"></table>
+    </div>
+  </body>
+  <script>
+    const obten_municipios = function (provincia) {
+      fetch("./municipios.json")
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("No se pudo cargar el archivo JSON");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          // console.log("Contenido de municipios.json:", data);
+          let provincia_seleccionada =
+            document.getElementById("provincia").value;
+          let datos_provincia = data.filter(
+            (m) => m.Provincia === provincia_seleccionada
+          );
+          selector_municipio = document.getElementById("municipio");
+          selector_municipio.innerHTML = "";
+          datos_provincia.forEach((municipio) => {
+            // console.log(municipio.Municipio, municipio.Codigo);
+            let opcion = document.createElement("option");
+            opcion.innerText = municipio.Municipio;
+            opcion.value = municipio.Codigo;
+            selector_municipio.appendChild(opcion);
+          });
+          console.log("Contenido de la provincia:", datos_provincia);
+        })
+        .catch((error) => {
+          console.error("Error al leer municipios.json:", error);
+        });
+    };
+
+    const renderiza_temperaturas = function (temperaturas, dia) {
+      let tabla_temp = document.getElementById(`temperaturas_${dia}`);
+      tabla_temp.innerHTML = `<caption>
+        Temperaturas esperadas para ${dia}
+      </caption>
+      <thead>
+        <td>Hora</td>
+        <td>Temperatura</td>
+      </thead>
+      <tbody class="cuerpo_tabla"></tbody>`;
+      //cuerpoTabla = tabla_temp.querySelector(".cuerpo_tabla");
+      cuerpoTabla = tabla_temp.getElementsByClassName("cuerpo_tabla")[0];
+      temperaturas.forEach((momento) => {
+        fila = document.createElement("tr");
+        fila.innerHTML = `<td>${momento.periodo}</td><td>${momento.value}</td>`;
+        cuerpoTabla.appendChild(fila);
+      });
+    };
+
+    const hacer_peticion_api = function () {
+      let codMunicipio = document.getElementById("municipio").value;
+      console.log(codMunicipio);
+      const apiKey =
+        "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhaXRvci5kb25hZG9AZ21haWwuY29tIiwianRpIjoiOWVkNGFhYzQtNTI3YS00N2YzLTg5NzMtMTNlNGIxMTE4ZDUxIiwiaXNzIjoiQUVNRVQiLCJpYXQiOjE3MzU4MDY0NTYsInVzZXJJZCI6IjllZDRhYWM0LTUyN2EtNDdmMy04OTczLTEzZTRiMTExOGQ1MSIsInJvbGUiOiIifQ.vNGn79c-G44_Eu8MnrimYDDfHf0il9jILxXeBE2z1AE";
+      let url = `https://opendata.aemet.es/opendata/api/prediccion/especifica/municipio/horaria/${codMunicipio}?api_key=${apiKey}`;
+
+      fetch(url)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Error en la respuesta: " + response.status);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          console.log("Datos recibidos de la API:", data);
+          // La respuesta tiene una propiedad llamada 'datos' con la URL donde están los datos reales
+          return fetch(data.datos);
+        })
+        .then((response) => response.json())
+        .then((predicciones) => {
+          console.log("Predicciones:", predicciones);
+          let temperaturas = predicciones[0].prediccion.dia[0].temperatura;
+          renderiza_temperaturas(temperaturas, "hoy");
+          temperaturas = predicciones[0].prediccion.dia[1].temperatura;
+          renderiza_temperaturas(temperaturas, "mañana");
+          temperaturas = predicciones[0].prediccion.dia[2].temperatura;
+          renderiza_temperaturas(temperaturas, "pasado");
+        })
+        .catch((error) => {
+          console.error("Hubo un error en la petición:", error);
+        });
+    };
+
+    document
+      .getElementById("provincia")
+      .addEventListener("change", obten_municipios);
+
+    document
+      .getElementById("peticion")
+      .addEventListener("click", hacer_peticion_api);
+  </script>
+</html>
