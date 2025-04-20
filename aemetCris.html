@@ -19,27 +19,51 @@
       <label for="playa">Selecciona una playa:</label>
       <select name="playa" id="playa">
         <option value="" disabled selected>Elige una playa</option>
-        <option value="4805601">Playa de Sopelana</option>
+        
+        <option value="4801401">Playa de Murriola</option>
+        <option value="4807701">Playa de Plencia</option>
         <option value="4805602">Playa de Gorliz</option>
-        <option value="4805603">Playa de Bakio</option>
+        <option value="4804402">Playa de Barinatxe</option>
         <option value="4805604">Playa de Mundaka</option>
-        <option value="4805605">Playa de Laga</option>
-        <option value="4805606">Playa de Laida</option>
-        <option value="4805607">Playa de Barrika</option>
-        <option value="4805608">Playa de Azkorri</option>
+        <option value="4804802">Playa de Laga</option>
+        <option value="4804802">Playa de Laida</option>
+        <option value="4806302">Playa de Karraspio</option>
+       
       </select>
     </div>
     <button type="button" id="peticion">Obtener datos</button>
     <div id="resultado"></div>
   </body>
   <script>
-    const apiKey =
-      "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlZ3VzcXVpemFjcmlzdGluYUBnbWFpbC5jb20iLCJqdGkiOiIzOTZkYzc3MS1iZWVlLTQ2YmUtYjRkYi0yZGUxMjgxYWFmMjUiLCJpc3MiOiJBRU1FVCIsImlhdCI6MTc0NDc4ODAwOCwidXNlcklkIjoiMzk2ZGM3NzEtYmVlZS00NmJlLWI0ZGItMmRlMTI4MWFhZjI1Iiwicm9sZSI6IiJ9.lutTStfofioIu7kCnRlXmR2PvDluYPqlrHwDkBEWmMI";
+    // Declarar la variable url en un ámbito más amplio
+    let url = "";
 
-    const cargarDatos = () => {
-      const provinciaSelect = document.getElementById("provincia");
-      const provincia = provinciaSelect.value;
-      const url = `https://opendata.aemet.es/opendata/api/prediccion/especifica/playa/4805601?api_key=${apiKey}`;
+    // Obtener el elemento del selector de playa
+    const selectorPlaya = document.getElementById("playa");
+
+    // Agregar un evento de cambio al selector de playa
+    selectorPlaya.addEventListener("change", (event) => {
+      const selectedValue = event.target.value;
+      console.log("Playa seleccionada:", selectedValue); // Verificar el valor seleccionado
+
+      // Actualizar la URL con el valor seleccionado
+      url = `https://opendata.aemet.es/opendata/api/prediccion/especifica/playa/${selectedValue}?api_key=eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlZ3VzcXVpemFjcmlzdGluYUBnbWFpbC5jb20iLCJqdGkiOiJhZWU5MDNiMy02YWFhLTQ4YTMtOWI5ZC03ODY4ZGViNzYzM2MiLCJpc3MiOiJBRU1FVCIsImlhdCI6MTc0NTE0MDQyNCwidXNlcklkIjoiYWVlOTAzYjMtNmFhYS00OGEzLTliOWQtNzg2OGRlYjc2MzNjIiwicm9sZSI6IiJ9.6LVOyHsmTQ3Zj763bDS_qhxV03gnD0N5H5LRLvri4cQ`;
+      console.log("URL actualizada:", url); // Verificar la URL actualizada
+    });
+
+    // Obtener el botón de petición
+    const peticion = document.getElementById("peticion");
+
+    // Agregar un evento de clic al botón
+    peticion.addEventListener("click", () => {
+      if (!url) {
+        console.error("No se ha seleccionado ninguna playa.");
+        const resultadoDiv = document.getElementById("resultado");
+        resultadoDiv.innerHTML = "<p>Por favor, selecciona una playa antes de obtener los datos.</p>";
+        return;
+      }
+
+      console.log("URL generada:", url); // Verificar la URL generada
 
       fetch(url)
         .then((response) => {
@@ -49,59 +73,75 @@
           return response.json();
         })
         .then((data) => {
-          console.log("Datos recibidos de la API: ", data);
-          fetch(data.datos)
-            .then((response) => {
-              if (!response.ok) {
-                throw new Error("No se pudo cargar el archivo JSON");
-              }
-              return response.json();
-            })
-            .then((playasData) => {
-              console.log("Datos de playas: ", playasData);
-              renderizarDatos(playasData);
-            });
+          console.log("Respuesta completa de la API:", data); // Verificar la respuesta completa
+
+          if (data.datos) {
+            fetch(data.datos)
+              .then((response) => {
+                if (!response.ok) {
+                  throw new Error("No se pudo cargar el archivo JSON");
+                }
+                return response.json();
+              })
+              .then((Data) => {
+                console.log("Datos de playas: ", Data); // Verificar la estructura de los datos
+                renderizarDatos(Data); // Llamar a la función renderizarDatos
+              })
+              .catch((error) => {
+                console.error("Error al procesar los datos de playas: ", error);
+                const resultadoDiv = document.getElementById("resultado");
+                resultadoDiv.innerHTML = "<p>Error al cargar los datos de la playa.</p>";
+              });
+          } else {
+            console.error("La propiedad 'datos' no está disponible en la respuesta.");
+            const resultadoDiv = document.getElementById("resultado");
+            resultadoDiv.innerHTML = "<p>No hay datos disponibles para esta selección.</p>";
+          }
         })
         .catch((error) => {
           console.error("Error al obtener los datos de la API: ", error);
         });
-    };
-
-    // Asignar el evento al selector de provincia
-    document.getElementById("provincia").addEventListener("change", (event) => {
-      const provincia = event.target.value;
-      cargarDatos(provincia);
     });
 
-    // Asignar el evento al selector de playa
-    document.getElementById("playa").addEventListener("change", (event) => {
-      const playaId = event.target.value;
-      cargarDatos(playaId);
-    });
-
-    // Asignar el evento al botón
-    document.getElementById("peticion").addEventListener("click", cargarDatos);
-
-    // Cargar datos al cargar la página
-    document.addEventListener("DOMContentLoaded", () => {
-      cargarDatos();
-    });
-
-    // Renderiza los datos en el div resultado
     const renderizarDatos = (data) => {
       const resultadoDiv = document.getElementById("resultado");
-      resultadoDiv.innerHTML = ""; // Limpiar el contenido anterior
 
-      data.forEach((playa) => {
-        const playaDiv = document.createElement("div");
-        playaDiv.innerHTML = `
-          <h3>${playa.Nombre}</h3>
-          <p>Provincia: ${playa.Provincia}</p>
-          <p>Descripción: ${playa.Descripcion}</p>
+      // Limpiar el contenido previo
+      resultadoDiv.innerHTML = "";
+
+      // Verifica si los datos tienen la estructura esperada
+      if (!data || !data.length) {
+        console.error("Los datos no tienen la estructura esperada:", data);
+        resultadoDiv.innerHTML = "<p>No hay datos disponibles para esta playa.</p>";
+        return;
+      }
+
+      // Crear una tabla para mostrar los datos
+      const tabla = document.createElement("table");
+      tabla.setAttribute("border", "1");
+      tabla.setAttribute("style", "width: 100%; border-collapse: collapse;");
+
+      // Crear el encabezado de la tabla
+      const encabezado = document.createElement("tr");
+      encabezado.innerHTML = `
+        <th>Periodo</th>
+        <th>Temperatura Agua</th>
+      `;
+      tabla.appendChild(encabezado);
+
+      // Iterar sobre los datos y crear filas
+      data.forEach((momento) => {
+        const fila = document.createElement("tr");
+        fila.innerHTML = `
+          <td>${momento.periodo || "N/A"}</td>
+          <td>${momento.temperaturaAgua || "N/A"} °C</td>
         `;
-        resultadoDiv.appendChild(playaDiv);
+        tabla.appendChild(fila);
       });
-      return data;
+
+      // Añadir la tabla al div de resultados
+      resultadoDiv.appendChild(tabla);
     };
+
   </script>
 </html>
