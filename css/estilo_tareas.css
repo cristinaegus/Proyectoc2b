@@ -23,6 +23,44 @@ h3 {
   margin-top: 30px;
   margin-bottom: 15px;
 }
+select {
+  padding: 9px 15px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 16px;
+  margin-right: 10px;
+}
+/* Estilos para los botones de selección de importancia */
+input[type="radio"] {
+  padding: 9px 15px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 16px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+
+
+
+/* Colores para cada nivel de importancia */
+.alta {
+  color: red; /* Rojo para alta importancia */
+}
+
+.media {
+  color: blue; /* Azul para media importancia */
+}
+
+.baja {
+  color: yellow; /* Amarillo para baja importancia */
+}
+
+/* Opcional: Cambiar el color del texto al seleccionar */
+input[type="radio"]:checked + label {
+  font-weight: bold;
+  text-decoration: underline;
+}
 
 /* Estilos para los controles de entrada */
 input[type="text"] {

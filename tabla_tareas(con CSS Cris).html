@@ -16,6 +16,13 @@
     />
     <input type="datetime-local" id="momento" />
     <button type="button" id="aniadir_tarea">Añadir</button>
+    <select name="Importacia" id="importancia" >
+      <option value="" disabled selected>Selecciona la importancia</option>
+      <option value="Alta">Alta</option>
+      <option value="Media">Media</option>
+      <option value="Baja">Baja</option>
+    </select>
+
     <h3>Tareas</h3>
     <table>
       <thead>
@@ -91,28 +98,49 @@
       });
     };
 
+    // Función para añadir una nueva tarea
     const aniadirTarea = function () {
-      let input_tarea = document.getElementById("tarea_nueva");
-      let input_momento = document.getElementById("momento");
-      //let tareaNueva = {};
-      //tareaNueva.texto = input_tarea.value;
-      //tareaNueva.fecha = new Date(input_momento.value);
-      tareaNueva = new Tarea(new Date(input_momento.value), input_tarea.value);
+      const inputTarea = document.getElementById("tarea_nueva");
+      const inputMomento = document.getElementById("momento");
+      const inputImportancia = document.getElementById("importancia");
 
-      console.log(tareaNueva);
-      if (tareaNueva.texto === "") {
-        alert("La tarea no puede estar vacía");
-      } else {
-        input_tarea.value = "";
-        input_momento.value = "";
-        tareas.unshift(tareaNueva);
-        console.log(tareas);
-        renderizarListado();
+      const textoTarea = inputTarea.value;
+      const fechaTarea = inputMomento.value;
+      const importancia = inputImportancia.value;
+
+      if (!textoTarea || !fechaTarea || !importancia) {
+        alert("Por favor, completa todos los campos.");
+        return;
       }
+
+      // Crear una nueva fila en la tabla
+      const tabla = document.querySelector("table tbody") || document.createElement("tbody");
+      const nuevaFila = document.createElement("tr");
+
+      // Asignar la clase según la importancia
+      nuevaFila.classList.add(importancia.toLowerCase());
+
+      nuevaFila.innerHTML = `
+        <td>${new Date(fechaTarea).toLocaleString()}</td>
+        <td>${textoTarea}</td>
+        <td><button class="boton_borrar">Borrar</button></td>
+      `;
+
+      // Añadir la fila a la tabla
+      tabla.appendChild(nuevaFila);
+
+      // Si el tbody no existe, añadirlo a la tabla
+      if (!document.querySelector("table tbody")) {
+        document.querySelector("table").appendChild(tabla);
+      }
+
+      // Limpiar los campos del formulario
+      inputTarea.value = "";
+      inputMomento.value = "";
+      inputImportancia.value = "";
     };
 
-    document
-      .getElementById("aniadir_tarea")
-      .addEventListener("click", aniadirTarea);
+    // Evento para añadir la tarea al hacer clic en el botón
+    document.getElementById("aniadir_tarea").addEventListener("click", aniadirTarea);
   </script>
 </html>
