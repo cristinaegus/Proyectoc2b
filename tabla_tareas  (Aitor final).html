@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Listado Tareas</title>
+    <link rel="stylesheet" href="css/estilo_tareas.css" />
+  </head>
+  <body>
+    <h1>Listado tareas</h1>
+    <label for="texto_tarea"></label>
+    <input
+      type="text"
+      name="texto_tarea"
+      id="tarea_nueva"
+      maxlength="40"
+      placeholder="Introduce nueva tarea"
+    />
+    <input type="datetime-local" id="momento" />
+    <select name="prioridad" id="selector_prioridades">
+      <option value="muy_baja">Tarea poco importante</option>
+      <option value="baja">Tarea Normal</option>
+      <option value="media">Tarea Importante</option>
+      <option value="alta">Tarea Urgente</option>
+    </select>
+    <button type="button" id="aniadir_tarea">Añadir</button>
+    <h3>Tareas</h3>
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Fecha</th>
+          <th scope="col">Tarea</th>
+          <th scope="col">Borrar</th>
+          <th scope="col">Ejecutada</th>
+        </tr>
+      </thead>
+      <tbody id="tabla_tareas"></tbody>
+    </table>
+  </body>
+  <script>
+    let tareas = [];
+    class Tarea {
+      constructor(fecha, texto, importancia) {
+        console.log(fecha.valueOf());
+        if (!fecha.valueOf()) {
+          fecha = new Date();
+        }
+        this.fecha = fecha;
+        this.texto = texto;
+        this.importancia = importancia;
+        this.hecha = false;
+      }
+
+      creaFila(indice) {
+        let filaTarea = document.createElement("tr");
+        filaTarea.innerHTML = `<th scope="row">${this.fecha.toLocaleString()}</th>
+          <td>${this.texto}</td>
+          <td class="casilla_borrar"></td>
+          <td class="casilla_ejecutar"></td>`;
+        let itemBoton = document.createElement("button");
+        itemBoton.classList.add("boton_borrar");
+        itemBoton.innerText = "Borrar";
+        itemBoton.addEventListener("click", () => borrarItem(indice));
+        let casillaBoton =
+          filaTarea.getElementsByClassName("casilla_borrar")[0];
+        casillaBoton.appendChild(itemBoton);
+
+        let ejecBoton = document.createElement("button");
+        ejecBoton.classList.add("boton_ejecutar");
+        ejecBoton.innerText = "Ejecutada";
+        ejecBoton.disabled = this.hecha;
+        ejecBoton.addEventListener("click", () => ejecutarItem(indice));
+        let casillaEjecutar =
+          filaTarea.getElementsByClassName("casilla_ejecutar")[0];
+        casillaEjecutar.appendChild(ejecBoton);
+
+        filaTarea.setAttribute("importancia", this.importancia);
+        if (this.hecha) {
+          filaTarea.classList.add("finalizada");
+        }
+        return filaTarea;
+      }
+    }
+
+    const borrarItem = function (indice) {
+      console.log("borro" + indice);
+      if (
+        confirm(
+          `¿Quieres eliminar la tarea ${tareas[indice].texto} de la fecha ${tareas[indice].fecha}?`
+        )
+      ) {
+        tareas.splice(indice, 1);
+        renderizarListado();
+      }
+    };
+
+    const ejecutarItem = function (indice) {
+      console.log("Ejecuto la tarea" + tareas[indice].texto);
+      if (
+        confirm(
+          `¿Quieres marcar como ejecutada la tarea ${tareas[indice].texto} de la fecha ${tareas[indice].fecha}?`
+        )
+      ) {
+        tareas[indice].hecha = !tareas[indice].hecha;
+        console.log("Ejecutada la tarea" + tareas[indice].texto);
+        renderizarListado();
+      }
+    };
+
+    const renderizarListado = function () {
+      let tablaTareas = document.getElementById("tabla_tareas");
+      tablaTareas.innerHTML = "";
+      tareas.forEach((tarea, indice) => {
+        // Creación del botón
+        // let itemBoton = document.createElement("button");
+        // itemBoton.innerText = "Borrar";
+        // itemBoton.addEventListener("click", () => borrarItem(indice));
+
+        // Relleno la fila
+        let filaTarea = tarea.creaFila(indice);
+
+        // Añado el botón a su casilla
+        //let casillaBoton = filaTarea.getElementsByClassName("boton_borrar")[0];
+        //casillaBoton.appendChild(itemBoton);
+        console.log(filaTarea);
+
+        // Meter la fila en la tabla
+        tablaTareas.appendChild(filaTarea);
+      });
+    };
+
+    const aniadirTarea = function () {
+      let input_tarea = document.getElementById("tarea_nueva");
+      let input_momento = document.getElementById("momento");
+      let input_importancia = document.getElementById("selector_prioridades");
+      //let tareaNueva = {};
+      //tareaNueva.texto = input_tarea.value;
+      //tareaNueva.fecha = new Date(input_momento.value);
+      tareaNueva = new Tarea(
+        new Date(input_momento.value),
+        input_tarea.value,
+        input_importancia.value
+      );
+
+      console.log(tareaNueva);
+      if (tareaNueva.texto === "") {
+        alert("La tarea no puede estar vacía");
+      } else {
+        input_tarea.value = "";
+        input_momento.value = "";
+        input_importancia.value = "";
+        tareas.unshift(tareaNueva);
+        console.log(tareas);
+        renderizarListado();
+      }
+    };
+
+    document
+      .getElementById("aniadir_tarea")
+      .addEventListener("click", aniadirTarea);
+  </script>
+</html>
