@@ -1,0 +1,154 @@
+/* Estilos generales */
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: #333;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #ccdbf2;
+}
+
+h1 {
+  color: #35a716;
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 2.8em;
+  border-bottom: 2px solid #9a4660;
+  padding-bottom: 10px;
+}
+
+h2 {
+  color: #2281ef;
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 2em;
+  border-bottom: 1px solid #d66085;
+  padding-bottom: 10px;
+}
+
+/* Estilos para los controles de formulario */
+select {
+  padding: 8px 5px;
+  border: 1px solid #0dd;
+  border-radius: 4px;
+  background-color: #f9e1e1;
+  margin-right: 10px;
+  font-size: 16px;
+  transition: border-color 0.3s;
+}
+select:focus {
+  border-color: blue;
+  box-shadow: 0 0 5px rgba(0, 0, 255, 0.5); /* Un resaltado más visible */
+  outline: none; /* A menudo se quita el outline por defecto si se reemplaza */
+}
+
+/* label, #provincia y #municipio deben ocupar el 100% del ancho del contenedor
+por lo que la anchura del #municipio será variabla*/
+#contenedor-selectores {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  width: 100%; /* Ocupa todo el ancho disponible */
+  margin-bottom: 20px;
+}
+
+label {
+  margin-top: 10px;
+  font-weight: 600;
+  color: #0909b3;
+  flex: 0 0 auto; /* Ancho según contenido, sin crecer/encoger */
+}
+
+#provincia {
+  flex: 0 0 30%; /* 30% fijo, sin crecer/encoger */
+  margin-top: 10px;
+}
+
+#municipio {
+  flex: 1; /* Ocupa el espacio restante */
+  min-width: 10em;
+  margin-top: 10px;
+}
+
+/*Estilos del botón*/
+button {
+  /*Que el botón ocupe todo el ancho de su contenedor*/
+  display: block;
+  width: 100%;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  margin-top: 20px;
+  padding: 5px 20px;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+button:hover {
+  background-color: darkgrey;
+}
+button:active {
+  position: relative; /* Necesario para usar top/left */
+  top: 1px; /* Simula un pequeño hundimiento */
+}
+/* Estilo de foco que SÓLO debería aparecer con navegación por teclado */
+button:focus-visible {
+  outline: 3px solid dodgerblue;
+}
+
+/* Estilos para las tablas */
+.contenedor-tablas {
+  margin-top: 30px;
+  gap: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: flex-start; /* Importante para alineación correcta */
+}
+
+table {
+  border-collapse: collapse;
+  width: 30%;
+  min-width: 250px;
+  background-color: white;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 20px;
+  table-layout: fixed; /* Añade esto para control preciso */
+}
+
+td {
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  height: 45px; /* Altura fija para todas las celdas */
+  line-height: 1.3; /* Ajusta según necesidad */
+  overflow: hidden; /* Para contenido largo */
+  text-overflow: ellipsis; /* Opcional: muestra ... en texto largo */
+  vertical-align: middle; /* Centrado vertical */
+  box-sizing: border-box; /* Incluye padding en la altura */
+}
+
+thead td {
+  background-color: #eab8b8;
+  font-weight: bold;
+  padding: 10px;
+  text-align: center;
+}
+tbody tr:nth-child(even) {
+  background-color: #f4dddd;
+}
+tbody tr:hover {
+  background-color: #f1f1f1;
+}
+
+caption {
+  background-color: #3498db;
+  color: white;
+  padding: 10px;
+  font-weight: bold;
+  text-align: center;
+}
