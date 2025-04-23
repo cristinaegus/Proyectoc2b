@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ejercicio de clases</title>
+    <link rel="stylesheet" href="css/estilo_pelis.css" />
+  </head>
+  <body>
+    <h1>Ejercicio de clases-Lista de peliculas</h1>
+   <div class = "contenedor">
+     <div class="primea_fila">
+        <label for="titulo">Título</label>
+        <input
+         type="text"
+        name="titulo"
+        id="titulo"
+        placeholder="Introduzca el título"
+        maxlength="100"
+        />
+
+        <label for="director">Director</label>
+        <input
+      type="text"
+      name="director"
+      id="director"
+      placeholder="Introduzca el director"
+      maxlength="50"
+        />
+
+        <label for="anio">Año</label>
+        <input
+        type="text"
+         name="anio"
+        id="anio"
+        placeholder="Introduzca el año"
+         maxlength="4"
+        />
+
+        <label for="actores">Actores</label>
+        <input
+        type="text"
+        name="actores"
+        id="actores"
+        placeholder="Introduzca los actores"
+         maxlength="100"
+        />
+     </div>
+</div>
+    <!-- Selector para el país -->
+ <div class="segunda_fila">
+    <label for="pais">Seleccione uno o más países:</label>
+    <select name="pais" id="pais" multiple>
+      <option value="^[Argentina|Brasil|Chile|México|España]$" disabled>
+        Seleccione países
+      </option>
+      <option value="Argentina">Argentina</option>
+      <option value="Brasil">Brasil</option>
+      <option value="Chile">Chile</option>
+      <option value="México">México</option>
+      <option value="España">España</option>
+      <option value="Francia">Francia</option>
+    </select>
+
+    <!-- Selector para el género -->
+    <label for="genero">Seleccione uno o más géneros:</label>
+    <select name="genero" id="genero" multiple>
+      <option value="genero" disabled>Seleccione géneros</option>
+      <option value="Acción">Acción</option>
+      <option value="Comedia">Comedia</option>
+      <option value="Drama">Drama</option>
+      <option value="Terror">Terror</option>
+      <option value="Ciencia Ficción">Ciencia Ficción</option>
+    </select>
+
+    <label for="calificacion">Seleccione la calificación:</label>
+    <select name="calificacion" id="calificacion">
+      <option value="calificacion" disabled>Seleccione calificación</option>
+      <option value="G">G</option>
+      <option value="PG">PG</option>
+      <option value="PG-13">PG-13</option>
+      <option value="R">R</option>
+      <option value="NC-17">NC-17</option>
+      <option value="A">A</option>
+      <option value="B">B</option>
+      <option value="C">C</option>
+    </select>
+    </div>
+    <button type="button" id="aniadir">Añadir Película</button>
+  </div>
+  
+  <table id="tablaPeliculas"></table>
+  
+  </body>
+  <script type="module">
+    import { Pelicula } from "./js/pelicula.js";
+    console.log(Pelicula.getPaises()); // Debería mostrar ["Argentina", "Brasil", "Chile", "México", "España"]
+    // Definir los valores aceptables con selectores
+    const paises = Pelicula.getPaises();
+    const generos = Pelicula.getGeneros(); // Corregido de pelicula a Pelicula
+    const calificaciones = Pelicula.getCalificaciones(); // Actualizado para usar el método estático
+    const calificacionesNumericas = Array.from({ length: 10 }, (_, i) => i + 1); // [1, 2, ..., 10]
+
+    const poblarSelector = function (identificador, opciones) {
+      let selector = document.getElementById(identificador);
+      opciones.forEach((opcion) => {
+        let opcionElem = document.createElement("option");
+        opcionElem.setAttribute("value", opcion);
+        opcionElem.textContent = opcion;
+        selector.appendChild(opcionElem);
+      });
+    };
+
+    // Poblar los selectores con los valores aceptables
+    poblarSelector("pais", paises);
+
+    poblarSelector("genero", generos);
+
+    poblarSelector("calificacion", calificaciones);
+
+    const obtenerSeleccionados = (selector) => {
+      const selectElement = document.getElementById(selector);
+      return Array.from(selectElement.selectedOptions).map(
+        (option) => option.value
+      );
+    };
+
+    const obtenerTexto = (selector) => {
+      const inputElement = document.getElementById(selector);
+      return inputElement.value;
+    };
+
+    // Array para almacenar las películas creadas
+    const peliculas = [];
+
+    // Función para crear una nueva película
+    const crearPeli = () => {
+      const titulo = obtenerTexto("titulo");
+      const director = obtenerTexto("director");
+      const anio = obtenerTexto("anio");
+      const actores = obtenerTexto("actores");
+      const paisesSeleccionados = obtenerSeleccionados("pais");
+      const generosSeleccionados = obtenerSeleccionados("genero");
+      const calificacion = obtenerTexto("calificacion");
+
+      if (!titulo || !director || !anio || !actores || !calificacion) {
+        alert("Por favor, complete todos los campos obligatorios.");
+        return;
+      }
+
+      const nuevaPelicula = {
+        titulo,
+        director,
+        anio,
+        actores,
+        paises: paisesSeleccionados,
+        generos: generosSeleccionados,
+        calificacion,
+      };
+
+      // Añadir la nueva película al array
+      peliculas.push(nuevaPelicula);
+
+      // Renderizar la tabla con las películas actualizadas
+      renderizarTabla(peliculas);
+
+      console.log("Película añadida:", nuevaPelicula);
+      alert("Película añadida exitosamente.");
+    };
+
+    // Función para renderizar la tabla
+    const renderizarTabla = (peliculas) => {
+      // Eliminar la tabla existente si ya está renderizada
+      const tablaExistente = document.querySelector("table");
+      if (tablaExistente) {
+        tablaExistente.remove();
+      }
+
+      // Crear una nueva tabla
+      const tabla = document.createElement("table");
+      tabla.setAttribute("style", "border-collapse: collapse; width: 100%;");
+      tabla.setAttribute("border", "1"); // Agrega bordes a la tabla
+      const encabezado = document.createElement("tr");
+      encabezado.innerHTML = `
+    <th>Título</th>
+    <th>Director</th>
+    <th>Año</th>
+    <th>Actores</th>
+    <th>Países</th>
+    <th>Géneros</th>
+    <th>Calificación</th>
+  `;
+      tabla.appendChild(encabezado);
+
+      // Añadir las filas de las películas
+      peliculas.forEach((pelicula) => {
+        const fila = document.createElement("tr");
+        fila.innerHTML = `
+      <td>${pelicula.titulo}</td>
+      <td>${pelicula.director}</td>
+      <td>${pelicula.anio}</td>
+      <td>${pelicula.actores}</td>
+      <td>${pelicula.paises.join(", ")}</td>
+      <td>${pelicula.generos.join(", ")}</td>
+      <td>${pelicula.calificacion}</td>
+    `;
+        tabla.appendChild(fila);
+      });
+
+      // Añadir la tabla al cuerpo del documento
+      document.body.appendChild(tabla);
+    };
+
+    // Asociar el evento al botón "Añadir Película"
+    document.getElementById("aniadir").addEventListener("click", crearPeli);
+  </script>
+</html>
