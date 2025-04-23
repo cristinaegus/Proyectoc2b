@@ -19,35 +19,6 @@ h1 {
 }
 
 /* Estilos para los controles de formulario */
-/* el boton de obtener datos todo el ancho de la pagina*/
-button {
-  width: 100%;
-  background-color: #3498db;
-  color: white;
-  border: none;
-  padding: 5px 20px;
-  border-radius: 15px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s;
-}
-button:hover {
-  background-color: darkgrey;
-}
-.titulo {
-  display: block;
-  margin: 0 auto;
-  margin-top: 20px;
-  margin-bottom: 20px;
-
-  margin-right: 10px;
-  font-weight: 600;
-  color: #0909b3;
-  text-align: center;
-  font-size: 2em;
-  color: #0d0d0d;
-  margin-bottom: 20px;
-}
 label {
   display: inline-block;
   margin-right: 10px;
@@ -96,11 +67,15 @@ button:focus-visible {
 .contenedor-tablas {
   margin-top: 30px;
   gap: 20px;
+  display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
+  align-items: flex-start;
 }
+/* Hacer que  el contenido de las celdas sea en todas las filas uniforme*/
+
 table {
-  display: flex;
+  border-collapse: collapse;
   width: 30%;
   min-width: 250px;
   background-color: white;
@@ -108,15 +83,36 @@ table {
   border-radius: 8px;
   overflow: hidden;
   margin-bottom: 20px;
+  table-layout: fixed;
+}
+td {
+  padding: 10px;
+  text-align: center;
+  border-bottom: 1px solid #ddd;
+  overflow: hidden; /* Evitar que el contenido se desborde */
+  text-overflow: ellipsis; /* Mostrar puntos suspensivos si el contenido es demasiado largo */
+  white-space: nowrap; /* Evitar el salto de línea */
+  height: 50px; /* Altura uniforme para todas las filas */
+  vertical-align: middle; /* Centrar el contenido verticalmente */
+  box-sizing: border-box;
 }
 thead td {
-  background-color: #f2f2f2;
+  background-color: #eab8b8;
   font-weight: bold;
   padding: 10px;
   text-align: center;
+  overflow: visible;
+  position: relative;
+  z-index: 1;
+  border-bottom: 2px solid #ddd;
+  border-top: 2px solid #ddd;
+  font-size: 1.2em;
+}
+tbody td {
+  height: 50px; /* Altura uniforme para todas las filas */
 }
 tbody tr:nth-child(even) {
-  background-color: #daaaaa;
+  background-color: #f4dddd;
 }
 tbody tr:hover {
   background-color: #f1f1f1;
@@ -133,4 +129,13 @@ caption {
   padding: 10px;
   font-weight: bold;
   text-align: center;
+}
+
+/* Asegurar que las celdas se adapten a la altura de las filas */
+td,
+th {
+  height: 100%; /* Asegurar que las celdas ocupen toda la altura de la fila */
+  vertical-align: middle; /* Centrar el contenido verticalmente */
+  padding: 10px; /* Espaciado interno uniforme */
+  text-align: center; /* Centrar el contenido horizontalmente */
 }

@@ -19,35 +19,6 @@ h1 {
 }
 
 /* Estilos para los controles de formulario */
-/* el boton de obtener datos todo el ancho de la pagina*/
-button {
-  width: 100%;
-  background-color: #3498db;
-  color: white;
-  border: none;
-  padding: 5px 20px;
-  border-radius: 15px;
-  cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s;
-}
-button:hover {
-  background-color: darkgrey;
-}
-.titulo {
-  display: block;
-  margin: 0 auto;
-  margin-top: 20px;
-  margin-bottom: 20px;
-
-  margin-right: 10px;
-  font-weight: 600;
-  color: #0909b3;
-  text-align: center;
-  font-size: 2em;
-  color: #0d0d0d;
-  margin-bottom: 20px;
-}
 label {
   display: inline-block;
   margin-right: 10px;
@@ -96,11 +67,12 @@ button:focus-visible {
 .contenedor-tablas {
   margin-top: 30px;
   gap: 20px;
+  display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
 }
 table {
-  display: flex;
+  border-collapse: collapse;
   width: 30%;
   min-width: 250px;
   background-color: white;
@@ -110,13 +82,13 @@ table {
   margin-bottom: 20px;
 }
 thead td {
-  background-color: #f2f2f2;
+  background-color: #eab8b8;
   font-weight: bold;
   padding: 10px;
   text-align: center;
 }
 tbody tr:nth-child(even) {
-  background-color: #daaaaa;
+  background-color: #f4dddd;
 }
 tbody tr:hover {
   background-color: #f1f1f1;
