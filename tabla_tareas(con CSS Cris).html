@@ -16,7 +16,7 @@
     />
     <input type="datetime-local" id="momento" />
     <button type="button" id="aniadir_tarea">Añadir</button>
-    <select name="Importacia" id="importancia" >
+    <select name="Importacia" id="importancia">
       <option value="" disabled selected>Selecciona la importancia</option>
       <option value="Alta">Alta</option>
       <option value="Media">Media</option>
@@ -114,7 +114,9 @@
       }
 
       // Crear una nueva fila en la tabla
-      const tabla = document.querySelector("table tbody") || document.createElement("tbody");
+      const tabla =
+        document.querySelector("table tbody") ||
+        document.createElement("tbody");
       const nuevaFila = document.createElement("tr");
 
       // Asignar la clase según la importancia
@@ -141,6 +143,15 @@
     };
 
     // Evento para añadir la tarea al hacer clic en el botón
-    document.getElementById("aniadir_tarea").addEventListener("click", aniadirTarea);
+    document
+      .getElementById("aniadir_tarea")
+      .addEventListener("click", aniadirTarea);
+    // hacer una funcion para cuando se pulse el boton borrar eliminar la fila
+    document.addEventListener("click", function (event) {
+      if (event.target.classList.contains("boton_borrar")) {
+        const fila = event.target.closest("tr");
+        fila.remove();
+      }
+    });
   </script>
 </html>

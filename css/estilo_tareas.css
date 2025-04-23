@@ -40,9 +40,6 @@ input[type="radio"] {
   cursor: pointer;
 }
 
-
-
-
 /* Colores para cada nivel de importancia */
 .alta {
   color: red; /* Rojo para alta importancia */
@@ -53,7 +50,7 @@ input[type="radio"] {
 }
 
 .baja {
-  color: yellow; /* Amarillo para baja importancia */
+  color: rgb(9, 78, 18); /* Amarillo para baja importancia */
 }
 
 /* Opcional: Cambiar el color del texto al seleccionar */
