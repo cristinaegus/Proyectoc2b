@@ -42,17 +42,17 @@ input[type="radio"] {
 
 /* Colores para cada nivel de importancia */
 .alta {
-  color: red; /* Rojo para alta importancia */
+  background-color: red; /* Rojo para alta importancia */
   font-weight: bold;
 }
 
 .media {
-  color: blue; /* Azul para media importancia */
+  background-color: blue; /* Azul para media importancia */
   font-weight: bold;
 }
 
 .baja {
-  color: green; /* Verde para baja importancia */
+  background-color: green; /* Verde para baja importancia */
   font-weight: bold;
 }
 
@@ -217,4 +217,22 @@ tbody tr:hover {
   border-radius: 4px;
   margin: 10px 0;
   display: none;
+}
+
+/* Estilo para tareas de alta importancia */
+.Alta {
+  background-color: #f8d7da; /* Rojo claro */
+  color: #721c24; /* Texto rojo oscuro */
+}
+
+/* Estilo para tareas de media importancia */
+.Media {
+  background-color: #fff3cd; /* Amarillo claro */
+  color: #856404; /* Texto amarillo oscuro */
+}
+
+/* Estilo para tareas de baja importancia */
+.Baja {
+  background-color: #d4edda; /* Verde claro */
+  color: #155724; /* Texto verde oscuro */
 }

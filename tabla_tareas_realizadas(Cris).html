@@ -50,8 +50,9 @@
 
       creaFila(indice) {
         let filaTarea = document.createElement("tr");
+        filaTarea.classList.add(this.importancia); // Aplica la clase de importancia a la fila
         filaTarea.innerHTML = `<th scope="row">${this.fecha.toLocaleString()}</th>
-          <td class="${this.importancia}">${this.texto}</td>
+          <td>${this.texto}</td>
           <td class="casilla_borrar"></td>
           <td class="casilla_realizado"></td>`;
 
