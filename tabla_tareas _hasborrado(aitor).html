@@ -4,26 +4,30 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Listado Tareas</title>
-    <link rel="stylesheet" href="css/estilo_tareas.css" />
+    <link rel="stylesheet" href="css/estilo_tareas_realizadas(Cris).css" />
   </head>
   <body>
     <h1>Listado tareas</h1>
-    <label for="texto_tarea"></label>
-    <input
-      type="text"
-      name="texto_tarea"
-      id="tarea_nueva"
-      maxlength="40"
-      placeholder="Introduce nueva tarea"
-    />
-    <input type="datetime-local" id="momento" />
-    <select name="prioridad" id="selector_prioridades">
-      <option value="muy_baja">Tarea poco importante</option>
-      <option value="baja">Tarea Normal</option>
-      <option value="media">Tarea Importante</option>
-      <option value="alta">Tarea Urgente</option>
-    </select>
-    <button type="button" id="aniadir_tarea">Añadir</button>
+    <div class="primera_fila">
+      <label for="texto_tarea"></label>
+      <input
+        type="text"
+        name="texto_tarea"
+        id="tarea_nueva"
+        maxlength="40"
+        placeholder="Introduce nueva tarea"
+      />
+      <input type="datetime-local" id="momento" />
+    </div>
+    <div class="segunda_fila">
+      <select name="prioridad" id="selector_prioridades">
+        <option value="muy_baja">Tarea poco importante</option>
+        <option value="baja">Tarea Normal</option>
+        <option value="media">Tarea Importante</option>
+        <option value="alta">Tarea Urgente</option>
+      </select>
+      <button type="button" id="aniadir_tarea">Añadir</button>
+    </div>
     <h3>Tareas</h3>
     <table>
       <thead>
@@ -53,8 +57,8 @@
 
       creaFila(indice) {
         let filaTarea = document.createElement("tr");
-        filaTarea.innerHTML = `<th scope="row">${this.fecha.toLocaleString()}</th>
-          <td>${this.texto}</td>
+        filaTarea.innerHTML = `<th scope="row" class="casilla_fecha">${this.fecha.toLocaleString()}</th>
+          <td class="casilla_texto">${this.texto}</td>
           <td class="casilla_borrar"></td>
           <td class="casilla_ejecutar"></td>`;
         let itemBoton = document.createElement("button");
@@ -82,6 +86,27 @@
       }
     }
 
+    const has_borrado = function (tarea) {
+      const notificacion = document.createElement("div");
+      notificacion.classList.add("notificacion_borrado");
+      console.log(
+        `Has borrado la tarea: ${tarea.texto} de la fecha ${tarea.fecha}`
+      );
+      notificacion.innerText = `Has borrado la tarea: ${tarea.texto} de la fecha ${tarea.fecha}`;
+      document.body.appendChild(notificacion);
+
+      setTimeout(() => {
+        notificacion.classList.add("desaparece");
+        notificacion.innerText = `La tarea ${tarea.texto} ha sido eliminada`;
+        //hacer un efecto de opacidad
+        notificacion.style.opacity = "0";
+        notificacion.style.transition = "opacity 1s";
+        notificacion.style.transform = "translateY(-20px)";
+
+        document.body.removeChild(notificacion);
+      }, 6000);
+    };
+
     const borrarItem = function (indice) {
       console.log("borro" + indice);
       if (
@@ -89,7 +114,9 @@
           `¿Quieres eliminar la tarea ${tareas[indice].texto} de la fecha ${tareas[indice].fecha}?`
         )
       ) {
+        let tareaBorrada = tareas[indice];
         tareas.splice(indice, 1);
+        has_borrado(tareaBorrada);
         renderizarListado();
       }
     };
@@ -101,8 +128,6 @@
           `¿Quieres marcar como ejecutada la tarea ${tareas[indice].texto} de la fecha ${tareas[indice].fecha}?`
         )
       ) {
-        let tareaBorrada = tareas.splice(indice, 1);
-        has_borrado(tareaBorrada);
         tareas[indice].hecha = !tareas[indice].hecha;
         console.log("Ejecutada la tarea" + tareas[indice].texto);
         renderizarListado();
