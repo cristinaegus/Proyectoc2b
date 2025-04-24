@@ -10,12 +10,55 @@ body {
   background-color: #f8f9fa;
 }
 
+/* Estilo para la barra de navegación */
+nav {
+  display: flex;
+  justify-content: center; /* Centrar los botones horizontalmente */
+  align-items: center;
+  background-color: #343a40; /* Fondo oscuro */
+  padding: 10px 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilo para los botones de la barra de navegación */
+.nav-boton {
+  display: inline-block;
+  padding: 10px 20px;
+  margin: 0 10px; /* Espaciado entre los botones */
+  background-color: #007bff; /* Fondo azul */
+  color: white; /* Texto blanco */
+  text-decoration: none; /* Quitar subrayado */
+  font-size: 1.2em; /* Tamaño de fuente */
+  font-weight: bold; /* Texto más visible */
+  border-radius: 5px; /* Bordes redondeados */
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+/* Efecto hover para los botones */
+.nav-boton:hover {
+  background-color: #0056b3; /* Azul más oscuro al pasar el cursor */
+  transform: translateY(-2px); /* Efecto de elevación */
+}
+
+/* Mantener el color blanco incluso después de visitar */
+.nav-boton:visited {
+  color: white;
+}
+
 h1 {
   color: #2c3e50;
+  position: sticky;
+  top: 5vh;
+  background-color: #437eb9;
+  padding-bottom: 10px;
+  font-size: 2.5em;
   text-align: center;
   margin-bottom: 25px;
   padding-bottom: 10px;
   border-bottom: 2px solid #6c757d;
+  border-radius: 15px;
 }
 
 h3 {
@@ -219,8 +262,99 @@ th {
   padding: 10px;
   border-radius: 4px;
   margin: 10px 0;
+  margin-bottom: 10px;
   display: none;
 }
 .confirm-message.show {
   display: block;
+}
+
+/* Estilo para la alerta de confirmación */
+.alerta_borrado {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border: 2px solid #dc3545;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  text-align: center;
+  width: 300px;
+}
+
+.alerta_borrado p {
+  margin-bottom: 20px;
+  font-size: 16px;
+  color: #333;
+}
+
+botones_alerta {
+  display: flex;
+  justify-content: space-around;
+}
+
+.boton_confirmar {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.boton_confirmar:hover {
+  background-color: #218838;
+}
+
+.boton_cancelar {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.boton_cancelar:hover {
+  background-color: #c82333;
+}
+
+/* Estilo para la alerta de mensaje */
+.alerta_mensaje {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #f8d7da; /* Fondo rojo claro */
+  color: #721c24; /* Texto rojo oscuro */
+  border: 1px solid #f5c6cb;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  text-align: center;
+  animation: slide-down 0.3s ease-out;
+}
+
+/* Animación para que la alerta aparezca suavemente */
+@keyframes slide-down {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* Efecto de desvanecimiento */
+.fade-out {
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
 }

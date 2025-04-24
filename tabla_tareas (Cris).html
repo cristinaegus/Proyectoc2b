@@ -7,6 +7,10 @@
     <link rel="stylesheet" href="css/estilo_tareas (2).css" />
   </head>
   <body>
+    <nav>
+      <a href="aemet_Cris_CSS.html" class="nav-boton">Predicciones</a>
+      <a href="tabla_tareas (Cris).html" class="nav-boton">Listado de Tareas</a>
+    </nav>
     <h1>Listado tareas</h1>
     <div class="primera_fila">
       <label for="texto_tarea"></label>
@@ -105,18 +109,49 @@
       }, 5000);
     };
 
+    const confirmarBorrado = function (indice) {
+      // Crear el contenedor de la alerta
+      const alerta = document.createElement("div");
+      alerta.classList.add("alerta_borrado");
+
+      // Contenido de la alerta
+      alerta.innerHTML = `
+        <p>¿Estás seguro de que quieres borrar la tarea <strong>${
+          tareas[indice].texto
+        }</strong> de la fecha <strong>${tareas[
+        indice
+      ].fecha.toLocaleString()}</strong>?</p>
+        <div class="botones_alerta">
+          <button id="confirmar_borrado" class="boton_confirmar">Sí</button>
+          <button id="cancelar_borrado" class="boton_cancelar">No</button>
+        </div>
+      `;
+
+      // Agregar la alerta al cuerpo del documento
+      document.body.appendChild(alerta);
+
+      // Manejar el botón "Sí"
+      document
+        .getElementById("confirmar_borrado")
+        .addEventListener("click", () => {
+          let tareaBorrada = tareas[indice];
+          tareas.splice(indice, 1); // Eliminar la tarea
+          has_borrado(tareaBorrada); // Mostrar notificación de borrado
+          renderizarListado(); // Actualizar la lista
+          document.body.removeChild(alerta); // Eliminar la alerta
+        });
+
+      // Manejar el botón "No"
+      document
+        .getElementById("cancelar_borrado")
+        .addEventListener("click", () => {
+          document.body.removeChild(alerta); // Eliminar la alerta
+        });
+    };
+
     const borrarItem = function (indice) {
       console.log("borro" + indice);
-      if (
-        confirm(
-          `¿Quieres eliminar la tarea ${tareas[indice].texto} de la fecha ${tareas[indice].fecha}?`
-        )
-      ) {
-        let tareaBorrada = tareas[indice];
-        tareas.splice(indice, 1);
-        has_borrado(tareaBorrada);
-        renderizarListado();
-      }
+      confirmarBorrado(indice);
     };
 
     const ejecutarItem = function (indice) {
@@ -169,6 +204,26 @@
       }, 5000);
     };
 
+    const mostrarAlerta = function (mensaje) {
+      // Crear el contenedor de la alerta
+      const alerta = document.createElement("div");
+      alerta.classList.add("alerta_mensaje");
+
+      // Agregar el mensaje
+      alerta.innerText = mensaje;
+
+      // Agregar la alerta al cuerpo del documento
+      document.body.appendChild(alerta);
+
+      // Eliminar la alerta después de 3 segundos
+      setTimeout(() => {
+        alerta.classList.add("fade-out");
+        setTimeout(() => {
+          document.body.removeChild(alerta);
+        }, 500);
+      }, 3000);
+    };
+
     const aniadirTarea = function () {
       let input_tarea = document.getElementById("tarea_nueva");
       let input_momento = document.getElementById("momento");
@@ -183,7 +238,8 @@
       );
       console.log(tareaNueva);
       if (tareaNueva.texto === "") {
-        alert("La tarea no puede estar vacía");
+        mostrarAlerta("La tarea no puede estar vacía");
+        return; // Salir de la función si el texto está vacío
       } else {
         input_tarea.value = "";
         input_momento.value = "";
