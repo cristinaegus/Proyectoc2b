@@ -128,9 +128,7 @@
           </button>
         </div>
       </section>
-      <section>
-        <!--Form Section -->
-      </section>
+
       <!-- Results Section -->
       <section id="results">
         <h2 class="text-2xl font-bold mb-6 flex items-center">
@@ -231,7 +229,7 @@
     <script>
       // Configuración de la API
 
-      const BASE_URL = "https://api.themoviedb.org/3/search/movie";
+      const BASE_URL = "https://jsonplaceholder.typicode.com/phop'";
       const API_KEY =
         "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmM2U2ZGZhZTE1NTk2Y2EwOTEwNjA1MTNmZDM5ODg2ZCIsIm5iZiI6MTc0NTU2NDEyNC45LCJzdWIiOiI2ODBiMzFkYzYzYzVmOTUyMjk4OWIyMTQiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.PqEP0q388KygeEMYjAtPMNAfoQkiUOkvFJUI5iuPaWg"; // Reemplaza con tu clave válida
       const URL = `${BASE_URL}/discover/movie?api_key=${API_KEY}&include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc`;
