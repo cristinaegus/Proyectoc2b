@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Series y Pelis - Buscador de Películas y Series</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      .movie-card:hover .movie-overlay {
+        opacity: 1;
+      }
+      .movie-overlay {
+        transition: opacity 0.3s ease;
+      }
+      .skeleton {
+        animation: pulse 2s infinite ease-in-out;
+      }
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+      }
+    </style>
+  </head>
+  <body class="bg-gray-900 text-gray-100 min-h-screen">
+    <!-- Header -->
+    <header class="bg-gray-800 shadow-lg sticky top-0 z-50">
+      <div
+        class="container mx-auto px-4 py-4 flex flex-col md:flex-row items-center justify-between"
+      >
+        <div class="flex items-center mb-4 md:mb-0">
+          <i class="fas fa-film text-yellow-400 text-2xl mr-2"></i>
+          <h1
+            class="text-2xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent"
+          >
+            Series y Películas
+          </h1>
+        </div>
+
+        <div class="w-full md:w-1/2 relative">
+          <div class="relative">
+            <input
+              type="text"
+              id="search-input"
+              placeholder="Buscar películas, series..."
+              class="w-full px-4 py-2 rounded-full bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
+            />
+            <button
+              id="search-btn"
+              class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-yellow-500 hover:bg-yellow-600 text-gray-900 rounded-full p-2"
+            >
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="hidden md:flex items-center space-x-4 mt-4 md:mt-0">
+          <button
+            id="movies-btn"
+            class="px-3 py-1 rounded-full bg-yellow-500 text-gray-900 font-medium"
+          >
+            Películas
+          </button>
+          <button
+            id="tv-btn"
+            class="px-3 py-1 rounded-full bg-gray-700 hover:bg-gray-600"
+          >
+            Series TV
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile Tabs -->
+    <div class="md:hidden bg-gray-800 py-2 sticky top-16 z-40">
+      <div class="flex justify-center space-x-4">
+        <button
+          id="mobile-movies-btn"
+          class="px-3 py-1 rounded-full bg-yellow-500 text-gray-900 font-medium"
+        >
+          Películas
+        </button>
+        <button
+          id="mobile-tv-btn"
+          class="px-3 py-1 rounded-full bg-gray-700 hover:bg-gray-600"
+        >
+          Series TV
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+      <!-- Featured Section -->
+      <section id="featured" class="mb-12 relative rounded-xl overflow-hidden">
+        <div
+          class="absolute inset-0 bg-gradient-to-t from-gray-900 to-transparent z-10"
+        ></div>
+        <div class="absolute bottom-0 left-0 z-20 p-6 md:p-10 w-full">
+          <h2 class="text-3xl md:text-5xl font-bold mb-2">Avengers: Endgame</h2>
+          <div class="flex items-center mb-4">
+            <span
+              class="bg-yellow-500 text-gray-900 px-2 py-1 rounded text-xs font-bold mr-2"
+              >8.4</span
+            >
+            <span class="text-sm"
+              >2019 • 181 min • Acción, Aventura, Ciencia ficción</span
+            >
+          </div>
+          <p class="text-gray-300 mb-4 max-w-2xl">
+            Los Vengadores se reúnen una vez más para revertir los
+            acontecimientos provocados por Thanos y restaurar el orden en el
+            universo.
+          </p>
+          <button
+            class="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-2 px-6 rounded-full flex items-center"
+          >
+            <i class="fas fa-play mr-2"></i> Ver ahora
+          </button>
+        </div>
+        <img
+          src="https://image.tmdb.org/t/p/w300/1E5baAaEse26fej7uHcjOgEE2t2.jpg"
+          alt="Avengers: Endgame"
+          class="w-full h-auto"
+        />
+      </section>
+       <section>
+         <!--Form Section -->
+
+        <div class="flex justify-center mb-8">
+          <form
+            id="search-form"
+            class="w-full max-w-lg flex items-center bg-gray-800 rounded-full shadow-lg p-2"
+          >
+            <input
+              type="text"
+              id="search-input"
+              placeholder="Buscar películas, series..."
+              class="w-full px-4 py-2 rounded-full bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
+            />
+            <button
+              id="search-btn"
+              class="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-2 px-6 rounded-full ml-2"
+            >
+              Buscar
+            </button>
+          </form>
+
+       </section>
+      <!-- Results Section -->
+      <section id="results">
+        <h2 class="text-2xl font-bold mb-6 flex items-center">
+          <span id="results-title">Películas populares</span>
+          <span id="loading-spinner" class="ml-2 hidden">
+            <i class="fas fa-spinner fa-spin"></i>
+          </span>
+        </h2>
+
+        <div
+          id="results-container"
+          class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6"
+        >
+          <!-- Skeleton loading -->
+          <div class="skeleton">
+            <div class="bg-gray-800 rounded-lg h-64 mb-2"></div>
+            <div class="bg-gray-800 rounded h-4 w-3/4 mb-2"></div>
+            <div class="bg-gray-800 rounded h-4 w-1/2"></div>
+          </div>
+          <div class="skeleton">
+            <div class="bg-gray-800 rounded-lg h-64 mb-2"></div>
+            <div class="bg-gray-800 rounded h-4 w-3/4 mb-2"></div>
+            <div class="bg-gray-800 rounded h-4 w-1/2"></div>
+          </div>
+          <div class="skeleton">
+            <div class="bg-gray-800 rounded-lg h-64 mb-2"></div>
+            <div class="bg-gray-800 rounded h-4 w-3/4 mb-2"></div>
+            <div class="bg-gray-800 rounded h-4 w-1/2"></div>
+          </div>
+          <div class="skeleton">
+            <div class="bg-gray-800 rounded-lg h-64 mb-2"></div>
+            <div class="bg-gray-800 rounded h-4 w-3/4 mb-2"></div>
+            <div class="bg-gray-800 rounded h-4 w-1/2"></div>
+          </div>
+          <div class="skeleton">
+            <div class="bg-gray-800 rounded-lg h-64 mb-2"></div>
+            <div class="bg-gray-800 rounded h-4 w-3/4 mb-2"></div>
+            <div class="bg-gray-800 rounded h-4 w-1/2"></div>
+          </div>
+        </div>
+
+        <div class="flex justify-center mt-10">
+          <button
+            id="load-more"
+            class="bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-6 rounded-full"
+          >
+            Cargar más
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 py-8 mt-12">
+      <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <div class="mb-4 md:mb-0">
+            <div class="flex items-center">
+              <i class="fas fa-film text-yellow-400 text-2xl mr-2"></i>
+              <h2
+                class="text-xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent"
+              >
+                CineSearch
+              </h2>
+            </div>
+            <p class="text-gray-400 mt-2">
+              Encuentra tus películas y series favoritas
+            </p>
+          </div>
+
+          <div class="flex space-x-6">
+            <a href="#" class="text-gray-400 hover:text-yellow-400">
+              <i class="fab fa-facebook-f text-xl"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-yellow-400">
+              <i class="fab fa-twitter text-xl"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-yellow-400">
+              <i class="fab fa-instagram text-xl"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-yellow-400">
+              <i class="fab fa-github text-xl"></i>
+            </a>
+          </div>
+        </div>
+
+        <div
+          class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-500 text-sm"
+        >
+          <p>
+            © 2023 CineSearch. Todos los derechos reservados. Datos
+            proporcionados por TMDb API.
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Configuración de la API
+      const API_KEY =
+        "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmM2U2ZGZhZTE1NTk2Y2EwOTEwNjA1MTNmZDM5ODg2ZCIsIm5iZiI6MTc0NTU2NDEyNC45LCJzdWIiOiI2ODBiMzFkYzYzYzVmOTUyMjk4OWIyMTQiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.PqEP0q388KygeEMYjAtPMNAfoQkiUOkvFJUI5iuPaWg"; // Reemplaza con tu clave válida
+      const BASE_URL =
+        "https://api.themoviedb.org/3/search/movie?query=Jack+Reacher";
+      const URL = `${BASE_URL}/discover/movie?api_key=${API_KEY}&include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc`;
+      const IMG_URL = "https://image.tmdb.org/t/p/w500";
+
+      // Variables de estado
+      let currentPage = 1;
+      let currentType = "movie"; // 'movie' o 'tv'
+      let currentQuery = "";
+
+      // Elementos del DOM
+      const searchInput = document.getElementById("search-input");
+      const searchBtn = document.getElementById("search-btn");
+      const moviesBtn = document.getElementById("movies-btn");
+      const tvBtn = document.getElementById("tv-btn");
+      const mobileMoviesBtn = document.getElementById("mobile-movies-btn");
+      const mobileTvBtn = document.getElementById("mobile-tv-btn");
+      const resultsTitle = document.getElementById("results-title");
+      const resultsContainer = document.getElementById("results-container");
+      const loadMoreBtn = document.getElementById("load-more");
+      const loadingSpinner = document.getElementById("loading-spinner");
+
+      // Event Listeners
+      searchBtn.addEventListener("click", () => {
+        currentQuery = searchInput.value.trim();
+        currentPage = 1;
+        fetchContent();
+      });
+
+      searchInput.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+          currentQuery = searchInput.value.trim();
+          currentPage = 1;
+          fetchContent();
+        }
+      });
+
+      moviesBtn.addEventListener("click", () => {
+        currentType = "movie";
+        currentQuery = "";
+        currentPage = 1;
+        searchInput.value = "";
+        updateActiveButtons();
+        fetchContent();
+      });
+
+      tvBtn.addEventListener("click", () => {
+        currentType = "tv";
+        currentQuery = "";
+        currentPage = 1;
+        searchInput.value = "";
+        updateActiveButtons();
+        fetchContent();
+      });
+
+      mobileMoviesBtn.addEventListener("click", () => {
+        currentType = "movie";
+        currentQuery = "";
+        currentPage = 1;
+        searchInput.value = "";
+        updateActiveButtons();
+        fetchContent();
+      });
+
+      mobileTvBtn.addEventListener("click", () => {
+        currentType = "tv";
+        currentQuery = "";
+        currentPage = 1;
+        searchInput.value = "";
+        updateActiveButtons();
+        fetchContent();
+      });
+
+      loadMoreBtn.addEventListener("click", () => {
+        currentPage++;
+        fetchContent(false);
+      });
+
+      // Funciones
+      function updateActiveButtons() {
+        if (currentType === "movie") {
+          moviesBtn.classList.add("bg-yellow-500", "text-gray-900");
+          moviesBtn.classList.remove("bg-gray-700", "hover:bg-gray-600");
+          tvBtn.classList.add("bg-gray-700", "hover:bg-gray-600");
+          tvBtn.classList.remove("bg-yellow-500", "text-gray-900");
+
+          mobileMoviesBtn.classList.add("bg-yellow-500", "text-gray-900");
+          mobileMoviesBtn.classList.remove("bg-gray-700", "hover:bg-gray-600");
+          mobileTvBtn.classList.add("bg-gray-700", "hover:bg-gray-600");
+          mobileTvBtn.classList.remove("bg-yellow-500", "text-gray-900");
+        } else {
+          tvBtn.classList.add("bg-yellow-500", "text-gray-900");
+          tvBtn.classList.remove("bg-gray-700", "hover:bg-gray-600");
+          moviesBtn.classList.add("bg-gray-700", "hover:bg-gray-600");
+          moviesBtn.classList.remove("bg-yellow-500", "text-gray-900");
+
+          mobileTvBtn.classList.add("bg-yellow-500", "text-gray-900");
+          mobileTvBtn.classList.remove("bg-gray-700", "hover:bg-gray-600");
+          mobileMoviesBtn.classList.add("bg-gray-700", "hover:bg-gray-600");
+          mobileMoviesBtn.classList.remove("bg-yellow-500", "text-gray-900");
+        }
+      }
+
+      // Ruta al archivo JSON
+      const JSON_URL = "./results.json";
+
+      // Función para obtener los datos del archivo JSON
+      async function fetchResults() {
+        try {
+          const response = await fetch(JSON_URL);
+
+          if (!response.ok) {
+            throw new Error("Error al cargar el archivo JSON");
+          }
+
+          const data = await response.json();
+          displayResults(data.results); // Llama a la función para mostrar los resultados
+        } catch (error) {
+          console.error("Error al obtener los datos:", error);
+          resultsContainer.innerHTML = `<p class="text-red-400 col-span-full text-center py-10">${error.message}</p>`;
+        }
+      }
+
+      // Función para mostrar los resultados en la página
+      function displayResults(items) {
+        resultsContainer.innerHTML = ""; // Limpia el contenedor de resultados
+
+        items.forEach((item) => {
+          const card = document.createElement("div");
+          card.className =
+            "movie-card relative rounded-lg overflow-hidden group";
+
+          const title = item.title || item.original_title;
+          const date = item.release_date || "N/A";
+          const year = date.split("-")[0];
+          const rating = item.vote_average
+            ? item.vote_average.toFixed(1)
+            : "N/A";
+
+          card.innerHTML = `
+      <div class="relative">
+        <img 
+          src="${
+            item.poster_path
+              ? IMG_URL + item.poster_path
+              : "https://via.placeholder.com/300x450?text=No+Image"
+          }" 
+          alt="${title}" 
+          class="w-full h-auto rounded-lg"
+          onerror="this.src='https://via.placeholder.com/300x450?text=No+Image'"
+        >
+        <div class="movie-overlay absolute inset-0 bg-black bg-opacity-70 opacity-0 flex flex-col justify-end p-4">
+          <div class="flex items-center mb-2">
+            <span class="bg-yellow-500 text-gray-900 px-2 py-1 rounded text-xs font-bold mr-2">${rating}</span>
+            <span class="text-xs">${year}</span>
+          </div>
+          <h3 class="text-white font-bold truncate">${title}</h3>
+          <button class="mt-2 bg-yellow-500 hover:bg-yellow-600 text-gray-900 text-xs font-bold py-1 px-3 rounded-full">
+            <i class="fas fa-info-circle mr-1"></i> Detalles
+          </button>
+        </div>
+      </div>
+      <h3 class="text-white font-semibold mt-2 truncate">${title}</h3>
+      <p class="text-gray-400 text-sm">${year}</p>
+    `;
+
+          resultsContainer.appendChild(card);
+        });
+      }
+
+      // Llama a la función para obtener los datos al cargar la página
+      fetchResults();
+    </script>
+  </body>
+</html>
