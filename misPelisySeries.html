@@ -46,20 +46,21 @@
         </div>
 
         <div class="w-full md:w-1/2 relative">
-          <div class="relative">
+          <form id="search-form" class="flex justify-center mb-8">
             <input
               type="text"
               id="search-input"
-              placeholder="Buscar películas, series..."
-              class="w-full px-4 py-2 rounded-full bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
+              placeholder="Introduce el título de la película"
+              class="w-full max-w-md px-4 py-2 rounded-full bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
             />
             <button
               id="search-btn"
-              class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-yellow-500 hover:bg-yellow-600 text-gray-900 rounded-full p-2"
+              type="button"
+              class="ml-4 bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-2 px-6 rounded-full"
             >
-              <i class="fas fa-search"></i>
+              Buscar
             </button>
-          </div>
+          </form>
         </div>
 
         <div class="hidden md:flex items-center space-x-4 mt-4 md:mt-0">
@@ -126,35 +127,10 @@
             <i class="fas fa-play mr-2"></i> Ver ahora
           </button>
         </div>
-        <img
-          src="https://image.tmdb.org/t/p/w300/1E5baAaEse26fej7uHcjOgEE2t2.jpg"
-          alt="Avengers: Endgame"
-          class="w-full h-auto"
-        />
       </section>
-       <section>
-         <!--Form Section -->
-
-        <div class="flex justify-center mb-8">
-          <form
-            id="search-form"
-            class="w-full max-w-lg flex items-center bg-gray-800 rounded-full shadow-lg p-2"
-          >
-            <input
-              type="text"
-              id="search-input"
-              placeholder="Buscar películas, series..."
-              class="w-full px-4 py-2 rounded-full bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-yellow-400"
-            />
-            <button
-              id="search-btn"
-              class="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-2 px-6 rounded-full ml-2"
-            >
-              Buscar
-            </button>
-          </form>
-
-       </section>
+      <section>
+        <!--Form Section -->
+      </section>
       <!-- Results Section -->
       <section id="results">
         <h2 class="text-2xl font-bold mb-6 flex items-center">
@@ -217,7 +193,7 @@
               <h2
                 class="text-xl font-bold bg-gradient-to-r from-yellow-400 to-yellow-600 bg-clip-text text-transparent"
               >
-                CineSearch
+                Series y Películas
               </h2>
             </div>
             <p class="text-gray-400 mt-2">
@@ -245,7 +221,7 @@
           class="border-t border-gray-700 mt-8 pt-6 text-center text-gray-500 text-sm"
         >
           <p>
-            © 2023 CineSearch. Todos los derechos reservados. Datos
+            © 2025 Mis Pelis y Series. Todos los derechos reservados. Datos
             proporcionados por TMDb API.
           </p>
         </div>
@@ -254,10 +230,10 @@
 
     <script>
       // Configuración de la API
+
+      const BASE_URL = "https://api.themoviedb.org/3/search/movie";
       const API_KEY =
         "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmM2U2ZGZhZTE1NTk2Y2EwOTEwNjA1MTNmZDM5ODg2ZCIsIm5iZiI6MTc0NTU2NDEyNC45LCJzdWIiOiI2ODBiMzFkYzYzYzVmOTUyMjk4OWIyMTQiLCJzY29wZXMiOlsiYXBpX3JlYWQiXSwidmVyc2lvbiI6MX0.PqEP0q388KygeEMYjAtPMNAfoQkiUOkvFJUI5iuPaWg"; // Reemplaza con tu clave válida
-      const BASE_URL =
-        "https://api.themoviedb.org/3/search/movie?query=Jack+Reacher";
       const URL = `${BASE_URL}/discover/movie?api_key=${API_KEY}&include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc`;
       const IMG_URL = "https://image.tmdb.org/t/p/w500";
 
@@ -280,16 +256,14 @@
 
       // Event Listeners
       searchBtn.addEventListener("click", () => {
-        currentQuery = searchInput.value.trim();
-        currentPage = 1;
-        fetchContent();
+        const query = searchInput.value.trim(); // Obtiene el texto ingresado
+        fetchResults(query); // Llama a la función con el término de búsqueda
       });
 
       searchInput.addEventListener("keypress", (e) => {
         if (e.key === "Enter") {
-          currentQuery = searchInput.value.trim();
-          currentPage = 1;
-          fetchContent();
+          const query = searchInput.value.trim(); // Obtiene el texto ingresado
+          fetchResults(query); // Llama a la función con el término de búsqueda
         }
       });
 
@@ -362,8 +336,8 @@
       // Ruta al archivo JSON
       const JSON_URL = "./results.json";
 
-      // Función para obtener los datos del archivo JSON
-      async function fetchResults() {
+      // Función para obtener los datos del archivo JSON y buscar películas
+      async function fetchResults(query = "") {
         try {
           const response = await fetch(JSON_URL);
 
@@ -372,11 +346,70 @@
           }
 
           const data = await response.json();
-          displayResults(data.results); // Llama a la función para mostrar los resultados
+
+          // Filtrar los resultados según el término de búsqueda
+          const filteredResults = data.results.filter((item) =>
+            item.title.toLowerCase().includes(query.toLowerCase())
+          );
+
+          // Si hay una coincidencia exacta, cargar la película
+          const exactMatch = filteredResults.find(
+            (item) => item.title.toLowerCase() === query.toLowerCase()
+          );
+
+          if (exactMatch) {
+            displayMovieDetails(exactMatch); // Muestra los detalles de la película
+          } else if (filteredResults.length > 0) {
+            displayResults(filteredResults); // Muestra los resultados filtrados
+          } else {
+            resultsContainer.innerHTML =
+              '<p class="text-gray-400 col-span-full text-center py-10">No se encontraron resultados</p>';
+          }
         } catch (error) {
           console.error("Error al obtener los datos:", error);
           resultsContainer.innerHTML = `<p class="text-red-400 col-span-full text-center py-10">${error.message}</p>`;
         }
+      }
+
+      function displayMovieDetails(movie) {
+        resultsContainer.innerHTML = ""; // Limpia el contenedor de resultados
+
+        const movieDetails = document.createElement("div");
+        movieDetails.className = "movie-details p-4 bg-gray-800 rounded-lg";
+
+        const title = movie.title || movie.original_title;
+        const date = movie.release_date || "N/A";
+        const year = date.split("-")[0];
+        const rating = movie.vote_average
+          ? movie.vote_average.toFixed(1)
+          : "N/A";
+        const overview = movie.overview || "Sin descripción disponible.";
+
+        movieDetails.innerHTML = `
+          <div class="flex flex-col md:flex-row items-center">
+            <img 
+              src="${
+                movie.poster_path
+                  ? IMG_URL + movie.poster_path
+                  : "https://via.placeholder.com/300x450?text=No+Image"
+              }" 
+              alt="${title}" 
+              class="w-full md:w-1/3 rounded-lg mb-4 md:mb-0"
+              onerror="this.src='https://via.placeholder.com/300x450?text=No+Image'"
+            >
+            <div class="md:ml-6">
+              <h2 class="text-3xl font-bold text-yellow-500 mb-4">${title}</h2>
+              <p class="text-gray-400 mb-2"><strong>Año:</strong> ${year}</p>
+              <p class="text-gray-400 mb-2"><strong>Calificación:</strong> ${rating}</p>
+              <p class="text-gray-300 mb-4">${overview}</p>
+              <button class="bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-2 px-6 rounded-full">
+                Ver ahora
+              </button>
+            </div>
+          </div>
+        `;
+
+        resultsContainer.appendChild(movieDetails);
       }
 
       // Función para mostrar los resultados en la página
@@ -396,6 +429,7 @@
             : "N/A";
 
           card.innerHTML = `
+
       <div class="relative">
         <img 
           src="${
