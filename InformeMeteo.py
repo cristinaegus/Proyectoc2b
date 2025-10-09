@@ -1,5 +1,6 @@
 import requests
 import json
+import time
 from reportlab.lib.pagesizes import letter, A4
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
@@ -9,7 +10,7 @@ from datetime import datetime
 
 class InformeMeteo:
     def __init__(self):
-        self.api_key = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhaXRvci5kb25hZG9AZ21haWwuY29tIiwianRpIjoiOWVkNGFhYzQtNTI3YS00N2YzLTg5NzMtMTNlNGIxMTE4ZDUxIiwiaXNzIjoiQUVNRVQiLCJpYXQiOjE3MzU4MDY0NTYsInVzZXJJZCI6IjllZDRhYWM0LTUyN2EtNDdmMy04OTczLTEzZTRiMTExOGQ1MSIsInJvbGUiOiIifQ.vNGn79c-G44_Eu8MnrimYDDfHf0il9jILxXeBE2z1AE"
+        self.api_key = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJlZ3VzcXVpemFjcmlzdGluYUBnbWFpbC5jb20iLCJqdGkiOiJhZWU5MDNiMy02YWFhLTQ4YTMtOWI5ZC03ODY4ZGViNzYzM2MiLCJpc3MiOiJBRU1FVCIsImlhdCI6MTc0NTE0MDQyNCwidXNlcklkIjoiYWVlOTAzYjMtNmFhYS00OGEzLTliOWQtNzg2OGRlYjc2MzNjIiwicm9sZSI6IiJ9.6LVOyHsmTQ3Zj763bDS_qhxV03gnD0N5H5LRLvri4cQ"
         self.municipios = self.cargar_municipios()
     
     def cargar_municipios(self):
@@ -21,7 +22,6 @@ class InformeMeteo:
                 return municipios
         except FileNotFoundError:
             print("Error: Archivo municipios.json no encontrado")
-            print("Verifica que el archivo existe en la ruta especificada")
             return []
         except json.JSONDecodeError:
             print("Error: El archivo municipios.json no tiene un formato JSON válido")
@@ -33,39 +33,171 @@ class InformeMeteo:
         print(f"Se encontraron {len(municipios_provincia)} municipios para la provincia {codigo_provincia}")
         return municipios_provincia
     
+    def realizar_peticion_con_reintentos(self, url, max_reintentos=3, timeout=30):
+        """Realizar petición HTTP con reintentos y timeout"""
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        }
+        
+        for intento in range(max_reintentos):
+            try:
+                print(f"Intento {intento + 1} de {max_reintentos}...")
+                response = requests.get(url, headers=headers, timeout=timeout)
+                response.raise_for_status()
+                return response
+            except requests.exceptions.Timeout:
+                print(f"Timeout en intento {intento + 1}")
+                if intento < max_reintentos - 1:
+                    print("Esperando 5 segundos antes del siguiente intento...")
+                    time.sleep(5)
+            except requests.exceptions.ConnectionError as e:
+                print(f"Error de conexión en intento {intento + 1}: {e}")
+                if intento < max_reintentos - 1:
+                    print("Esperando 5 segundos antes del siguiente intento...")
+                    time.sleep(5)
+            except requests.exceptions.RequestException as e:
+                print(f"Error en petición en intento {intento + 1}: {e}")
+                if intento < max_reintentos - 1:
+                    print("Esperando 5 segundos antes del siguiente intento...")
+                    time.sleep(5)
+        
+        return None
+    
     def obtener_prediccion(self, codigo_municipio):
         """Obtener predicción meteorológica de un municipio"""
         url = f"https://opendata.aemet.es/opendata/api/prediccion/especifica/municipio/horaria/{codigo_municipio}?api_key={self.api_key}"
         
         try:
             print(f"Realizando petición a la API para municipio {codigo_municipio}...")
+            
             # Primera petición para obtener la URL de los datos
-            response = requests.get(url)
-            response.raise_for_status()
+            response = self.realizar_peticion_con_reintentos(url)
+            if not response:
+                print("No se pudo obtener respuesta de la API después de varios intentos")
+                return None
+            
             data = response.json()
+            print(f"Respuesta de la API: {data}")
             
             if 'datos' not in data:
                 print("Error: La respuesta de la API no contiene la propiedad 'datos'")
+                print(f"Respuesta completa: {data}")
                 return None
             
             # Segunda petición para obtener los datos reales
             datos_url = data['datos']
             print(f"Obteniendo datos desde: {datos_url}")
-            response_datos = requests.get(datos_url)
-            response_datos.raise_for_status()
+            
+            response_datos = self.realizar_peticion_con_reintentos(datos_url)
+            if not response_datos:
+                print("No se pudieron obtener los datos meteorológicos")
+                return None
+            
             predicciones = response_datos.json()
             
             if not predicciones or len(predicciones) == 0:
                 print("Error: No se recibieron datos de predicción")
                 return None
             
+            print(f"Se obtuvieron datos para {len(predicciones)} ubicaciones")
             return predicciones[0]['prediccion']['dia']
         
-        except requests.exceptions.RequestException as e:
-            print(f"Error al obtener predicción: {e}")
+        except json.JSONDecodeError as e:
+            print(f"Error al decodificar JSON: {e}")
             return None
         except KeyError as e:
             print(f"Error: Estructura de datos inesperada: {e}")
+            return None
+        except Exception as e:
+            print(f"Error inesperado: {e}")
+            return None
+    
+    def crear_pdf_con_datos_ejemplo(self, nombre_municipio):
+        """Crear PDF con datos de ejemplo si la API no funciona"""
+        print("Creando PDF con datos de ejemplo...")
+        
+        # Crear el documento PDF
+        output_pdf = f"c:/Users/egusq/C2BCurso/Proyectoc2b/prediccion_ejemplo_{nombre_municipio.replace(' ', '_')}.pdf"
+        doc = SimpleDocTemplate(output_pdf, pagesize=A4)
+        
+        # Obtener estilos
+        styles = getSampleStyleSheet()
+        title_style = ParagraphStyle(
+            'CustomTitle',
+            parent=styles['Heading1'],
+            fontSize=24,
+            textColor=colors.Color(0.2, 0.65, 0.09),
+            alignment=1,
+            spaceAfter=30
+        )
+        
+        subtitle_style = ParagraphStyle(
+            'CustomSubtitle',
+            parent=styles['Heading2'],
+            fontSize=16,
+            textColor=colors.Color(0.1, 0.4, 0.7),
+            alignment=1,
+            spaceAfter=20
+        )
+        
+        # Contenido del documento
+        story = []
+        
+        # Título principal
+        title = Paragraph("Predicción Meteorológica (Datos de Ejemplo)", title_style)
+        story.append(title)
+        
+        # Subtítulo con municipio y fecha
+        fecha_actual = datetime.now().strftime("%d/%m/%Y %H:%M")
+        subtitle = Paragraph(f"Municipio: {nombre_municipio}<br/>Fecha del informe: {fecha_actual}<br/><i>Nota: Datos de ejemplo debido a problemas de conectividad</i>", subtitle_style)
+        story.append(subtitle)
+        story.append(Spacer(1, 30))
+        
+        # Datos de ejemplo
+        datos_ejemplo = [
+            {
+                'titulo': 'Temperaturas esperadas para hoy',
+                'datos': [
+                    ['Hora', 'Temperatura (°C)'],
+                    ['00:00', '12°C'],
+                    ['06:00', '10°C'],
+                    ['12:00', '18°C'],
+                    ['18:00', '15°C']
+                ]
+            },
+            {
+                'titulo': 'Temperaturas esperadas para mañana',
+                'datos': [
+                    ['Hora', 'Temperatura (°C)'],
+                    ['00:00', '11°C'],
+                    ['06:00', '9°C'],
+                    ['12:00', '20°C'],
+                    ['18:00', '16°C']
+                ]
+            },
+            {
+                'titulo': 'Temperaturas esperadas para pasado mañana',
+                'datos': [
+                    ['Hora', 'Temperatura (°C)'],
+                    ['00:00', '13°C'],
+                    ['06:00', '11°C'],
+                    ['12:00', '22°C'],
+                    ['18:00', '18°C']
+                ]
+            }
+        ]
+        
+        # Crear tablas
+        for tabla_info in datos_ejemplo:
+            self.crear_tabla(story, tabla_info['datos'], tabla_info['titulo'], styles)
+        
+        # Construir el PDF
+        try:
+            doc.build(story)
+            print(f"PDF con datos de ejemplo creado exitosamente: {output_pdf}")
+            return output_pdf
+        except Exception as e:
+            print(f"Error al crear el PDF: {e}")
             return None
     
     def crear_pdf_prediccion(self, codigo_provincia, codigo_municipio, nombre_municipio):
@@ -75,8 +207,8 @@ class InformeMeteo:
         prediccion_dias = self.obtener_prediccion(codigo_municipio)
         
         if not prediccion_dias:
-            print("No se pudo obtener la predicción")
-            return None
+            print("No se pudo obtener la predicción de la API. Creando PDF con datos de ejemplo...")
+            return self.crear_pdf_con_datos_ejemplo(nombre_municipio)
         
         # Crear el documento PDF
         output_pdf = f"c:/Users/egusq/C2BCurso/Proyectoc2b/prediccion_{nombre_municipio.replace(' ', '_')}.pdf"
@@ -247,10 +379,6 @@ def main():
         entrada_usuario = input(f"\nIngrese el número del municipio (1-{len(municipios)}): ").strip()
         indice = int(entrada_usuario) - 1
         
-        print(f"Entrada del usuario: '{entrada_usuario}'")
-        print(f"Índice calculado: {indice}")
-        print(f"Rango válido: 0 a {len(municipios)-1}")
-        
         if 0 <= indice < len(municipios):
             municipio_seleccionado = municipios[indice]
             codigo_municipio = municipio_seleccionado.get('Codigo')
@@ -271,11 +399,9 @@ def main():
                 print("Error al generar el informe")
         else:
             print(f"Número de municipio no válido. Debe estar entre 1 y {len(municipios)}")
-            print(f"Usted ingresó: {entrada_usuario} (índice: {indice})")
             
-    except ValueError as e:
-        print(f"Error: Por favor, ingrese un número válido. Entrada recibida: '{entrada_usuario}'")
-        print(f"Detalles del error: {e}")
+    except ValueError:
+        print("Error: Por favor, ingrese un número válido.")
     except Exception as e:
         print(f"Error inesperado: {e}")
 

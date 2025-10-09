@@ -25,6 +25,8 @@
       <table id="temperaturas_pasado"></table>
     </div>
   </body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.7.0/jspdf.plugin.autotable.min.js"></script>
   <script>
     const obten_municipios = function (provincia) {
       fetch("./municipios.json")
@@ -76,6 +78,53 @@
       });
     };
 
+    function generarPDFManana(municipio, temperaturasManana) {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ format: 'a4' });
+
+      doc.setFontSize(18);
+      doc.text(`Predicción meteorológica para ${municipio}`, 15, 25);
+      doc.setFontSize(14);
+      doc.text('Temperaturas esperadas para mañana', 15, 40);
+
+      // Prepara los datos para la tabla
+      const tableColumn = ["Hora", "Temperatura"];
+      const tableRows = temperaturasManana.map(item => [
+        item.periodo,
+        `${item.value}°C`
+      ]);
+
+      // Dibuja la tabla usando autoTable
+      doc.autoTable({
+        head: [tableColumn],
+        body: tableRows,
+        startY: 50,
+        theme: 'grid',
+        styles: { fontSize: 12 }
+      });
+
+      doc.save(`prediccion_manana_${municipio}.pdf`);
+    }
+
+    function generarPDF(municipio, temperaturasHoy) {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      doc.setFontSize(18);
+      doc.text(`Predicción meteorológica para ${municipio}`, 10, 20);
+
+      doc.setFontSize(12);
+      doc.text("Hora   |   Temperatura", 10, 30);
+
+      let y = 40;
+      temperaturasHoy.forEach(item => {
+        doc.text(`${item.periodo}   |   ${item.value}°C`, 10, y);
+        y += 10;
+      });
+
+      doc.save(`prediccion_${municipio}.pdf`);
+    }
+
     const hacer_peticion_api = function () {
       let codMunicipio = document.getElementById("municipio").value;
       console.log(codMunicipio);
@@ -98,12 +147,23 @@
         .then((response) => response.json())
         .then((predicciones) => {
           console.log("Predicciones:", predicciones);
-          let temperaturas = predicciones[0].prediccion.dia[0].temperatura;
-          renderiza_temperaturas(temperaturas, "hoy");
-          temperaturas = predicciones[0].prediccion.dia[1].temperatura;
-          renderiza_temperaturas(temperaturas, "mañana");
-          temperaturas = predicciones[0].prediccion.dia[2].temperatura;
-          renderiza_temperaturas(temperaturas, "pasado");
+          let temperaturasHoy = predicciones[0].prediccion.dia[0].temperatura;
+          renderiza_temperaturas(temperaturasHoy, "hoy");
+          let temperaturasManana = predicciones[0].prediccion.dia[1].temperatura;
+          renderiza_temperaturas(temperaturasManana, "mañana");
+          let temperaturasPasado = predicciones[0].prediccion.dia[2].temperatura;
+          renderiza_temperaturas(temperaturasPasado, "pasado");
+
+          // Obtener el nombre del municipio seleccionado
+          let municipioNombre = document.getElementById("municipio").selectedOptions[0].text;
+          let btnPDF = document.getElementById("btnPDFManana");
+          if (!btnPDF) {
+            btnPDF = document.createElement("button");
+            btnPDF.id = "btnPDFManana";
+            btnPDF.textContent = "Descargar PDF de mañana";
+            document.querySelector(".titulo").appendChild(btnPDF);
+          }
+          btnPDF.onclick = () => generarPDFManana(municipioNombre, temperaturasManana);
         })
         .catch((error) => {
           console.error("Hubo un error en la petición:", error);
