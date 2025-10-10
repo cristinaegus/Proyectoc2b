@@ -27,6 +27,7 @@
   </body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.7.0/jspdf.plugin.autotable.min.js"></script>
+  <script src="config.js"></script>
   <script>
     const obten_municipios = function (provincia) {
       fetch("./municipios.json")
@@ -128,9 +129,7 @@
     const hacer_peticion_api = function () {
       let codMunicipio = document.getElementById("municipio").value;
       console.log(codMunicipio);
-      const apiKey =
-        "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhaXRvci5kb25hZG9AZ21haWwuY29tIiwianRpIjoiOWVkNGFhYzQtNTI3YS00N2YzLTg5NzMtMTNlNGIxMTE4ZDUxIiwiaXNzIjoiQUVNRVQiLCJpYXQiOjE3MzU4MDY0NTYsInVzZXJJZCI6IjllZDRhYWM0LTUyN2EtNDdmMy04OTczLTEzZTRiMTExOGQ1MSIsInJvbGUiOiIifQ.vNGn79c-G44_Eu8MnrimYDDfHf0il9jILxXeBE2z1AE";
-      let url = `https://opendata.aemet.es/opendata/api/prediccion/especifica/municipio/horaria/${codMunicipio}?api_key=${apiKey}`;
+      let url = `http://localhost:3000/api/prediccion/${codMunicipio}`;
 
       fetch(url)
         .then((response) => {
@@ -139,12 +138,6 @@
           }
           return response.json();
         })
-        .then((data) => {
-          console.log("Datos recibidos de la API:", data);
-          // La respuesta tiene una propiedad llamada 'datos' con la URL donde están los datos reales
-          return fetch(data.datos);
-        })
-        .then((response) => response.json())
         .then((predicciones) => {
           console.log("Predicciones:", predicciones);
           let temperaturasHoy = predicciones[0].prediccion.dia[0].temperatura;
@@ -154,7 +147,7 @@
           let temperaturasPasado = predicciones[0].prediccion.dia[2].temperatura;
           renderiza_temperaturas(temperaturasPasado, "pasado");
 
-          // Obtener el nombre del municipio seleccionado
+          // Botón PDF de mañana
           let municipioNombre = document.getElementById("municipio").selectedOptions[0].text;
           let btnPDF = document.getElementById("btnPDFManana");
           if (!btnPDF) {
